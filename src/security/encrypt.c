@@ -4,6 +4,10 @@
 #include <openssl/aes.h>
 #include <string.h>
 
+/* Recommandations ANSSI 
+https://cyber.gouv.fr/sites/default/files/2021/03/anssi-guide-selection_crypto-1.0.pdf
+*/
+
 // Attention, je crois que la fonction AES_set_encrypt est obsolète, faudra utiliser un truc comme EVP_aes_128_ecb() ou un truc du genre
 // A voir prcq je suis pas sûr et faut se renseigner sur le concept
 
