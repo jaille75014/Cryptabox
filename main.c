@@ -5,29 +5,51 @@
 // #include "src/security/decrypt.h"
 void printMenu(){
 
-    printf("\n1. Crypter un fichier avec l'aide d'un mot de passe.\n2. Décrypter un fichier avec l'aide d'un mot de passe.\n3. Quitter.");
+    printf("\n1. crypt [fic] : Crypter un fichier avec l'aide d'un mot de passe.\n2. decrypt [fic] : Décrypter un fichier avec l'aide d'un mot de passe.\n3. quit : Quitter.");
 
 }
 
 int main() {
-    char action=0;
+    
+    
 
     printf("Bonjour ! Bienvenue dans votre outil préféré, CryptaBox.\n");
 
     do {
 
-        do{
+        char line[200]={" "};
+        char command[50]={" "};
+
+
+
+        fflush(stdin);
+
+    
             
-            printMenu();
+        printMenu();
 
-            printf("\nVotre action : ");
-            scanf("%d",&action);
+        printf("\nVotre action : ");
+        scanf("%[^\n]",line);
 
-            if(action<1||action>3){
-                fprintf(stderr,"Entrez une option valide.");
-            }
+        for(int i=0; (line[i]!=' ' && line[i]!='\0');++i){
+            command[i]=line[i];
+        }
 
-        } while(action<1||action>3);
+        if(strcmp(command,"crypt")==0){
+
+            printf("\ncrypt :)"); 
+            
+            
+        } else if(strcmp(command,"decrypt")==0){
+            printf("\ndecrypt :)"); 
+            
+        }else if(strcmp(command,"quit")==0){
+            printf("\nbye :)"); 
+            
+            exit(EXIT_SUCCESS);
+        }
+
+           
 
     
 
