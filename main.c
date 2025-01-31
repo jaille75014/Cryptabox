@@ -12,31 +12,34 @@ void printMenu(){
 }
 
 int main() {
-	
-    short int choice = 3;
 
-    while (1) {
-        switch (choice) {
-            case 1:
-                choice = create_account();
-                break;
-            case 2:
+    short int choice = 3;
+    do {    
+        init_cli();
+        char line[200]={" "};
+        char command[50]={" "};
+
+        printf("\nVotre action : ");
+        scanf("%[^\n]",line);
+        for(int i=0; (line[i]!=' ' && line[i]!='\0');++i){
+                command[i]=line[i];
+            }
+
+        if(strcmp(command, "connexion") == 0){
                 printf("Vous avez choisi de vous connecter.\n");
-                break;
-            case 3:
-                init_cli();
-                choice = 0;
-                break;
-            case 4:
+                return EXIT_SUCCESS;
+        } else if (strcmp(command, "inscription") == 0) {
+                printf("Vous avez choisi de vous inscrire.\n");
+                return EXIT_SUCCESS;
+        } else if (strcmp(command, "quitter") == 0) {
                 printf("Au revoir !\n");
-                exit(EXIT_SUCCESS);
-            default:
-                printf("=> ");
-                scanf("%hd", &choice);
-                fflush(stdin);
-                printf("\n");
+                return EXIT_SUCCESS;
+        } else if (strcmp(command, "menu") == 0) {
+            choice = init_cli();
+        } else {
+            printf("Erreur : commande inconnue.\n");
         }
-    }
+    } while (choice == 3);
 
     unsigned char key[32];
     unsigned char iv[AES_BLOCK_SIZE];
@@ -47,12 +50,8 @@ int main() {
         char line[200]={" "};
         char command[50]={" "};
 
-
-
         fflush(stdin);
 
-    
-            
         printMenu();
 
         printf("\nVotre action : ");
@@ -64,7 +63,7 @@ int main() {
 
 
 
-        if (strcmp(command, "crypt") == 0) {
+        if (strcmp(command, "chiffre") == 0) {
             printf("\nEntrez le fichier à crypter : ");
             scanf("%s", file);
             
