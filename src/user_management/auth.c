@@ -1,13 +1,42 @@
 #include <stdio.h>
 #include <string.h>
-#include <openssl/sha.h>
+//      #include <openssl/sha.h>
+#include <mysql.h>
 #include "auth.h"
 
 #define MAX_USERNAME = 50
 #define MAX_PASSWORD = 30
 #define HASH_SIZE = 65
 
+int connexionDb()
+{
+  MYSQL *con = mysql_init(NULL);
 
+  if (con == NULL)
+  {
+      fprintf(stderr, "%s\n", mysql_error(con));
+      exit(1);
+  }
+
+  if (mysql_real_connect(con, "localhost", "root", "$0tchi$Mysql",
+          NULL, 0, NULL, 0) == NULL)
+  {
+      fprintf(stderr, "%s\n", mysql_error(con));
+      mysql_close(con);
+      exit(1);
+  }
+
+  if (mysql_query(con, "CREATE DATABASE testdb"))
+  {
+      fprintf(stderr, "%s\n", mysql_error(con));
+      mysql_close(con);
+      exit(1);
+  }
+
+  mysql_close(con);
+  exit(0);
+}
+/*
 void hash_password(const char *password, char *hashed_password) {
     unsigned char hash[SHA256_DIGEST_LENGTH];
     SHA256((unsigned char *)password, strlen(password), hash);
@@ -57,3 +86,4 @@ int createAccount(){
 void hashPassword(const char *password, char *hashedPassword) {
     // En construction
 }
+*/
