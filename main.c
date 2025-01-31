@@ -7,6 +7,14 @@
 
 void printMenu(){
 
+    printf("_______                      _____       ______                \n");
+    printf("__  ____/___________  ___________  /______ ___  /___________  __\n");
+    printf("_  /    __  ___/_  / / /__  __ \\  __/  __ `/_  __ \\  __ \\_  |/_/\n");
+    printf("/ /___  _  /   _  /_/ /__  /_/ / /_ / /_/ /_  /_/ / /_/ /_>  <  \n");
+    printf("\\____/  /_/    _\\__, / _  .___/\\__/ \\__,_/ /_.___/\\____//_/|_|  \n");
+    printf("               /____/  /_/                                       \n");
+
+
     printf("\n1. crypt [fic] : Crypter un fichier avec l'aide d'un mot de passe.\n2. dechiffre [fic] : Décrypter un fichier avec l'aide d'un mot de passe.\n3. quit : Quitter.");
 
 }
