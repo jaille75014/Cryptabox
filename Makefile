@@ -1,15 +1,11 @@
-executable: main.o encrypt.o decrypt.o
-	gcc -o prog main.o encrypt.o decrypt.o -lssl -lcrypto
+executable: main.o crypto.o
+	gcc -o prog main.o crypto.o -lssl -lcrypto
 
 main.o: main.c 
 	gcc -c main.c
 
-encrypt.o: src/security/encrypt.c 
-	gcc -c src/security/encrypt.c
-
-decrypt.o: src/security/decrypt.c 
-	gcc -c src/security/decrypt.c
-
+crypto.o: src/security/crypto.c 
+	gcc -c src/security/crypto.c
 
 clean:
 	rm -rf *.o prog
