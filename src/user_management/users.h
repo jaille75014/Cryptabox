@@ -13,9 +13,10 @@ struct User {
 };
 
 
-int createUser(const char *username, const char *password);
-int authenticateUser(const char *username, const char *password);
-int deleteUser(const char *username);
-int checkUserExist(const char *username);
+int connexionDb();
+int hashPassword(const char *password, char *hashed_password);
+int userExist(MYSQL *con, char *username);
+int createAccount();
+void finish_with_error(MYSQL *con);
 
 #endif

@@ -4,6 +4,7 @@
 #include "src/cli/commands.c"
 #include "src/security/crypto.h"
 #include "src/security/crypto.c"
+#include "src/user_management/auth.c"
 
 void printMenu(){
 
@@ -21,33 +22,33 @@ void printMenu(){
 
 int main() {
 
-    short int choice = 3;
+    short int isConnected = 0;
     do {    
         init_cli();
         char line[200]={" "};
         char command[50]={" "};
 
-        printf("\nVotre action : ");
+        printf("=> ");
         scanf("%[^\n]",line);
         for(int i=0; (line[i]!=' ' && line[i]!='\0');++i){
-                command[i]=line[i];
-            }
+            command[i]=line[i];
+        }
 
         if(strcmp(command, "connexion") == 0){
-                printf("Vous avez choisi de vous connecter.\n");
-                return EXIT_SUCCESS;
+            printf("Vous avez choisi de vous connecter.\n");
+            isConnected = connexionUser();
         } else if (strcmp(command, "inscription") == 0) {
-                printf("Vous avez choisi de vous inscrire.\n");
-                return EXIT_SUCCESS;
+            printf("Vous avez choisi de vous inscrire.\n");
+            createAccount();
         } else if (strcmp(command, "quitter") == 0) {
-                printf("Au revoir !\n");
-                return EXIT_SUCCESS;
+            printf("Au revoir !\n");
+            exit(EXIT_SUCCESS);
         } else if (strcmp(command, "menu") == 0) {
-            choice = init_cli();
+            init_cli();
         } else {
             printf("Erreur : commande inconnue.\n");
         }
-    } while (choice == 3);
+    } while (isConnected == 0);
 
     unsigned char key[32];
     unsigned char iv[AES_BLOCK_SIZE];

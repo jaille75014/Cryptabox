@@ -1,74 +1,92 @@
-/*
-    Objectif : Gestion des utilisateurs (création, suppression, authentification et vérification)
-    Auteur : Cryptabox
-*/
-
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
-#include "users.h"
+//      #include <openssl/sha.h>
+#include <mysql.h>
 #include "auth.h"
+#include "users.h"
 
+#define MAX_USERNAME = 50
+#define MAX_PASSWORD = 30
+#define HASH_SIZE = 65
 
-#define MAX_USERS 100
-static User users[MAX_USERS];
-static int userCount = 0;
-
-
-
-int checkUserExist(const char *username) {
-    for (int i = 0; i < userCount; i++) {
-        if (strcmp(users[i].username, username) == 0) {
-            return 1;
-        }
-    }
-    return 0;
+void finish_with_error(MYSQL *con)
+{
+  fprintf(stderr, "%s\n", mysql_error(con));
+  mysql_close(con);
+  exit(1);
 }
 
 
-int createUser(const char *username, const char *password) {
+int connexionDb()
+{
+  MYSQL *con = mysql_init(NULL);
 
-    if (checkUserExist(username)) {
-        printf("L'utilisateur existe déjà ! Ah ba oui faut pas perdre la boule hein, même si le projet donne mal au crâne...\n");
-        exit(EXIT_FAILURE);
-    }
+  if (con == NULL) {
+      fprintf(stderr, "%s\n", mysql_error(con));
+      exit(1);
+  }
 
-    char passwordHash[64];
-    hashPassword(password, passwordHash);
+  if (mysql_real_connect(con, "localhost", "root", "$0tchi$Mysql", "CRYPTABOX", 0, NULL, 0) == NULL) {
+        finish_with_error(con);
+        }
 
-    strcpy(users[userCount].username, username);
-    strcpy(users[userCount].passwordHash, passwordHash);
-    userCount++;
-
-    return 0;
+  if (mysql_query(con, "USE DATABASE CRYPTABOX")) {
+      finish_with_error(con);
+  }
+  return con;
 }
 
-int authenticateUser(const char *username, const char *password) {
+void hash_password(const char *password, char *hashed_password) {
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    SHA256((unsigned char *)password, strlen(password), hash);
 
-    for (int i = 0; i < userCount; i++) {
-        if (strcmp(users[i].username, username) == 0) {
-            char passwordHash[64];
-            hashPassword(password, passwordHash);
-            if (strcmp(users[i].passwordHash, passwordHash) == 0) {
-                return 1;
-            }
-            return 0;
-        }
+    for (int i = 0; i < SHA256_DIGEST_LENGTH; i++) {
+        sprintf(hashed_password + (i * 2), "%02x", hash[i]);
     }
-    return 0;
-    
+    hashed_password[HASH_SIZE - 1] = '\0';
 }
 
-int deleteUser(const char *username) {
-
-    for (int i = 0; i < userCount; i++) {
-        if (strcmp(users[i].username, username) == 0) {
-            for (int j = i; j < userCount - 1; j++) {
-                users[j] = users[j + 1];
-            }
-            userCount--;
-            return 0;
-        }
+int userExist(MYSQL *con, char *username) {
+        int nameExist = 0;
+        int exist = 0;
+    nameExist = mysql_query(conn, "SELECT COUNT(*) FROM users WHERE name='%s'", username)
+    if (nameExist != 0) {
+        return exist = 1;
+    } else {
+        return exist = 0;
     }
-    return -1;
+}
+
+void createAccount(){
+	int id;
+        int isExist;
+        char username[MAX_USERNAME];
+	char fichier = "files/user_creation.txt";
+        char password[MAX_PASSWORD];
+	char hashPassword[HASH_SIZE];
+        FILE * addInFile =  NULL;
+        printf("Entrez votre identifiant :\n=> ");
+        scanf("%s", username);
+
+	isExist = userExist(connexionDb(), username);
+
+    if (isExist == 1) {
+        printf("Bah alors on pert la boule ? En même temps c'est vrai que ce projet donne mal à la tête...\n");
+        mysql_close(con);
+        return EXIT_FAILURE;
+    }
+
+        printf("Choisir un mot de passe sécurisé qui respecte les normes de l'ANSSI :\n=> ");
+        scanf("%s", password);
+	hashPassword(password, hashedPassword);
+
+        char query[512];
+        snprintf(query, sizeof(query), "INSERT INTO USERS (username, password) VALUES ('%s', '%s')", username, hashedPassword);
+
+        if (mysql_query(con, query)) {
+                finish_with_error(con);
+        }
+
+        printf("Votre compte a ete créé avec succès, vous pouvez vous connecter\n");
+        mysql_close(con);
 }
