@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "*.embeddedhtml": "html",
-        "encrypt.h": "c"
+        "encrypt.h": "c",
+        "auth.h": "c",
+        "users.h": "c"
     }
 }

@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <string.h>
-//      #include <openssl/sha.h>
+#include <openssl/sha.h>
 #include <mysql.h>
 #include "auth.h"
 #include "users.h"
 
-#define MAX_USERNAME = 50
-#define MAX_PASSWORD = 30
-#define HASH_SIZE = 65
+#define MAX_USERNAME 50
+#define MAX_PASSWORD 30
+#define HASH_SIZE 65
 
 void finish_with_error(MYSQL *con)
 {
@@ -17,8 +17,7 @@ void finish_with_error(MYSQL *con)
 }
 
 
-int connexionDb()
-{
+MYSQL *connexionDb() { 
   MYSQL *con = mysql_init(NULL);
 
   if (con == NULL) {
@@ -29,10 +28,6 @@ int connexionDb()
   if (mysql_real_connect(con, "localhost", "root", "$0tchi$Mysql", "CRYPTABOX", 0, NULL, 0) == NULL) {
         finish_with_error(con);
         }
-
-  if (mysql_query(con, "USE DATABASE CRYPTABOX")) {
-      finish_with_error(con);
-  }
   return con;
 }
 

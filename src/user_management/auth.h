@@ -6,7 +6,8 @@
 #ifndef AUTH_H
 #define AUTH_H
 
+#include <mysql>
 
-void hashPassword(const char *password, char *hashedPassword);
+int connexionUser(void);
 
-#endif 
+#endif /* AUTH_H */

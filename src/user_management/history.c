@@ -6,72 +6,70 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
+#include <src/user_management/users.h>
 
-#define MAX_HISTORY 100
 
-typedef struct UserAction UserAction;
-struct UserAction {
-    char username[50];
-    char action[100];
-    char timestamp[20];
-};
-
-void currentTimestamp(char *timestamp) {
-    time_t now = time(NULL);
-    struct tm *tm_info = localtime(&now);
-
-    sprintf(timestamp, "%d-%02d-%02d %02d:%02d:%02d", // En gros sprintf permet de formater la chaine mais sans l'afficher, on pourra la stocker/afficher plus tard
-            tm_info->tm_year + 1900, 
-            tm_info->tm_mon + 1,
-            tm_info->tm_mday,
-            tm_info->tm_hour,
-            tm_info->tm_min,
-            tm_info->tm_sec);
-}
-
-void logUserAction(const char *username, const char *action) {
-    FILE *fichier = NULL;
-    if ((fichier = fopen("user_actions.txt", "a")) == NULL) {
-        fprintf(stderr, "Erreur ouverture du fichier user_actions.txt\n");
-        exit(EXIT_FAILURE);
+void logCommandToDatabase(const char *command) {
+    if (currentUser == NULL) {
+        fprintf(stderr, "Aucun utilisateur connecté.\n");
+        return;
     }
 
-    UserAction userAction;
-    strcpy(userAction.username, username);
-    strcpy(userAction.action, action);
-    currentTimestamp(userAction.timestamp);
-
-    fprintf(fichier, "[%s] %s: %s\n", userAction.timestamp, userAction.username, userAction.action);
-
-    fclose(fichier);
-}
-
-void displayUserHistory(const char *username) {
-    FILE *fichier = NULL;
-    if ((fichier = fopen("user_actions.txt", "r")) == NULL) {
-        fprintf(stderr, "Erreur ouverture du fichier user_actions.txt\n");
-        exit(EXIT_FAILURE);
+    MYSQL *con = connexionDb();
+    if (con == NULL) {
+        fprintf(stderr, "Erreur lors de la connexion à la DB.\n");
+        return;
     }
-
-    char line[256];
-    printf("Historique des actions de %s :\n", username);
     
-    while (fgets(line, sizeof(line), fichier)) {
-        if (strstr(line, username) != NULL) {
-            printf("%s", line);
-        }
+    int userId;
+    char query[512];
+    snprintf(query, sizeof(query),
+            "SELECT id FROM USERS WHERE name='%s'",
+            currentUser->username);
+
+    if (mysql_query(con, query)) {
+        finish_with_error(con);
     }
 
-    fclose(fichier);
+    MYSQL_RES *result = mysql_store_result(con);
+    if (result == NULL) {
+        finish_with_error(con);
+    }
+
+    MYSQL_ROW row = mysql_fetch_row(result);
+    if (row == NULL) {
+        fprintf(stderr, "Utilisateur non trouvé\n");
+        mysql_free_result(result);
+        mysql_close(con);
+        return; 
+    }
+
+    userId = atoi(row[0]);
+    mysql_free_result(result);
+
+    char escapedCommand[1024];
+    mysql_real_escape_string(con, escapedCommand, command, strlen(command)); 
+
+    char query[2048];
+    snprintf(query, sizeof(query),
+             "INSERT INTO HISTORY (user_id, command) VALUES (%d, '%s')",
+                userId,
+                escapedCommand
+             );
+
+    if (mysql_query(con, query)) {
+        finish_with_error(con);
+    }
+    mysql_close(con);
 }
 
-int main(int argc, char *argv[]) {
-    logUserAction("Alban", "Connexion");
-    logUserAction("Raf", "Déconnexion");
-    logUserAction("Alban", "Changement de mot de passe");
+/*
+CREATE TABLE HISTORY (
+    id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,           
+    command TEXT,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES USERS(id)
+);
 
-    displayUserHistory("Jules");
-
-    return 0;
-}
+*/

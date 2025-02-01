@@ -6,17 +6,21 @@
 #ifndef USERS_H
 #define USERS_H
 
-typedef struct User * User;
-struct User {
+#include <mysql.h> 
+
+typedef struct user user,
+
+struct user {
     char username[50];
     char password_hash[64];
 };
 
 
-int connexionDb();
-int hashPassword(const char *password, char *hashed_password);
-int userExist(MYSQL *con, char *username);
-int createAccount();
+MYSQL *connexionDb(void);
 void finish_with_error(MYSQL *con);
+int userExist(MYSQL *con, const char *username);
+int createAccount(void);
 
-#endif
+void hashPassword(const char *password, char *hashedPassword);
+
+#endif 
