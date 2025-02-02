@@ -1,11 +1,29 @@
-executable: main.o crypto.o
-	gcc -o prog main.o crypto.o -lssl -lcrypto
+CC = gcc
+CFLAGS = -O2 -Wall -Wextra -Werror -ansi
+CLIBS = -lm
+EXE = Cryptabox
+OBJ = obj/
+SRC = src/
+INCL = include/
 
-main.o: main.c 
-	gcc -c main.c
+FILEC := $(wildcard $(SRC)cli/*.c $(SRC)network/*.c $(SRC)security/*.c $(SRC)user_management/*.c $(SRC)main.c)
+FILEH := $(wildcard $(SRC)cli/*.h $(SRC)network/*.h $(SRC)security/*.h $(SRC)user_management/*.h $(SRC)global.h)
+FILEO := $(patsubst $(SRC)%.c,$(OBJ)%.o,$(FILEC))
 
-crypto.o: src/security/crypto.c 
-	gcc -c src/security/crypto.c
 
-clean:
-	rm -rf *.o prog
+
+$(OBJ):
+	mkdir -p $(OBJ)
+
+$(EXE) : $(OBJ) $(FILEO)
+	$(CC) $(CFLAGS) -o $@ $^ $(CLIBS)
+
+$(OBJ)main.o : $(SRC)main.c $(FILEH)
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+$(OBJ)%.o : $(SRC)%.c $(INCL)%.h
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+clean :
+	rm -rf $(OBJ)*.o
+	rm -rf $(EXE)
