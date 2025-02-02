@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -O2 -Wall -Wextra -Werror -ansi
+CFLAGS = -O2 -Wall -Wextra -Werror
 CLIBS = -lm
 EXE = Cryptabox
 OBJ = obj/
@@ -13,15 +13,16 @@ FILEO := $(patsubst $(SRC)%.c,$(OBJ)%.o,$(FILEC))
 
 
 $(OBJ):
-	mkdir -p $(OBJ)
+	mkdir -p $(OBJ)cli $(OBJ)network $(OBJ)security $(OBJ)user_management
 
-$(EXE) : $(OBJ) $(FILEO)
+$(EXE) : $(FILEO)
 	$(CC) $(CFLAGS) -o $@ $^ $(CLIBS)
 
 $(OBJ)main.o : $(SRC)main.c $(FILEH)
 	$(CC) $(CFLAGS) -o $@ -c $<
 
-$(OBJ)%.o : $(SRC)%.c $(INCL)%.h
+$(OBJ)%.o : $(SRC)%.c $(FILEH)
+	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 clean :

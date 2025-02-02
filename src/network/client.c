@@ -5,12 +5,14 @@
 #include <netinet/in.h> // Pour gérer la structure socket avec la famille de protocole, l'IP et le port d'écoute
 #include <unistd.h>
 #include <arpa/inet.h> // Pour la fonction inet_aton() permettant de transformer une adresse IP en binaire
+#include "client.h"
+
 
 typedef struct sockaddr_in SOCKADDR_IN; // sockaddr_in est une structure définie dans <netinet/in.h> permettant de caractérisé notre socket ensuite avec bind()
 
-int main(){
+int client(){
 
-    char maxClient=1;
+    
 
     int socketClient = socket(AF_INET,SOCK_STREAM,0); // https://man7.org/linux/man-pages/man2/socket.2.html
 
