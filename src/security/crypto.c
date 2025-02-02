@@ -6,9 +6,15 @@
 #include <string.h>
 #include <crypto.h>
 
+
 int generateKeyAndIV(unsigned char *key, unsigned char *iv) {
 
     printf("Veuillez entrer la clé de chiffrement : ");
+    
+    char command[256];
+    snprintf(command, sizeof(command), "Entrée de la clé de chiffrement : %s", key);
+    logCommandToDatabase(command);
+
     if (scanf("%32s", key) != 1) {
         fprintf(stderr, "Erreur de lecture de la clé\n");
         return 0;
@@ -25,7 +31,6 @@ int generateKeyAndIV(unsigned char *key, unsigned char *iv) {
     }
 
     return 1;
-
 }
 
 int encryptFile(const char *input_file, const char *output_file, unsigned char *key, unsigned char *iv) {
