@@ -66,3 +66,9 @@ int connexionUser() {
          return 0; 
     }
 }
+
+void deconnexionUser() {
+    free(currentUser);
+    currentUser = NULL;
+    printf("Au revoir !\n");
+}

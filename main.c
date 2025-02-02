@@ -51,7 +51,7 @@ int main() {
             printf("Vous avez choisi de vous inscrire.\n");
             createAccount();
         } else if (strcmp(command, "quitter") == 0) {
-            printf("Au revoir !\n");
+            deconnexionUser();
             exit(EXIT_SUCCESS);
         } else if (strcmp(command, "menu") == 0) {
             init_cli();

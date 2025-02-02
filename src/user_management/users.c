@@ -8,6 +8,7 @@
 #define MAX_USERNAME 50
 #define MAX_PASSWORD 30
 #define HASH_SIZE 65
+#define SERVER "192.168.1.36"
 
 void finish_with_error(MYSQL *con)
 {
