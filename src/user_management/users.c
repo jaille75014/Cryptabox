@@ -26,26 +26,31 @@ MYSQL *connexionDb() {
       exit(1);
   }
 
-  if (mysql_real_connect(con, "localhost", "root", "$0tchi$Mysql", "CRYPTABOX", 0, NULL, 0) == NULL) {
+  if (mysql_real_connect(con, "192.168.1.36", "ajr3mousquetaires", "AJR3MOUSQUETAIRES", "CRYPTABOX", 0, NULL, 0) == NULL) {
         finish_with_error(con);
         }
   return con;
 }
 
-void hash_password(const char *password, char *hashed_password) {
-    unsigned char hash[SHA256_DIGEST_LENGTH];
-    SHA256((unsigned char *)password, strlen(password), hash);
+char hashPassword() {
+    const char* passwordToHash = NULL;
+    char* hash = NULL;
 
-    for (int i = 0; i < SHA256_DIGEST_LENGTH; i++) {
-        sprintf(hashed_password + (i * 2), "%02x", hash[i]);
-    }
-    hashed_password[HASH_SIZE - 1] = '\0';
+    passwordToHash = calloc(SHA256_DIGEST_LENGTH, sizeof(const unsigned char));
+    hash = calloc(SHA256_DIGEST_LENGTH, sizeof(char));
+
+    printf("Entrez votre mot de passe :\n");
+    fgets((char*) passwordToHash, SHA256_DIGEST_LENGTH, stdin);
+    size_t len = strlen((const char*) passwordToHash);
+    SHA256(passwordToHash, len, (unsigned char*) hash);
+
+    return 0;
 }
 
 int userExist(MYSQL *con, char *username) {
         int nameExist = 0;
         int exist = 0;
-    nameExist = mysql_query(conn, "SELECT COUNT(*) FROM users WHERE name='%s'", username)
+    nameExist = mysql_query(conn, "SELECT COUNT(*) FROM USERS WHERE name='%s'", username)
     if (nameExist != 0) {
         return exist = 1;
     } else {
@@ -55,14 +60,12 @@ int userExist(MYSQL *con, char *username) {
 
 void createAccount(){
 	int id;
-        int isExist;
-        char username[MAX_USERNAME];
-	char fichier = "files/user_creation.txt";
-        char password[MAX_PASSWORD];
-	char hashPassword[HASH_SIZE];
-        FILE * addInFile =  NULL;
-        printf("Entrez votre identifiant :\n=> ");
-        scanf("%s", username);
+    int isExist;
+    char username[MAX_USERNAME];
+	char *password;
+    
+    printf("Entrez votre identifiant :\n=> ");
+    scanf("%s", username);
 
 	isExist = userExist(connexionDb(), username);
 
@@ -71,13 +74,10 @@ void createAccount(){
         mysql_close(con);
         return EXIT_FAILURE;
     }
-
-        printf("Choisir un mot de passe sécurisé qui respecte les normes de l'ANSSI :\n=> ");
-        scanf("%s", password);
-	hashPassword(password, hashedPassword);
+	    password = hashPassword();
 
         char query[512];
-        snprintf(query, sizeof(query), "INSERT INTO USERS (username, password) VALUES ('%s', '%s')", username, hashedPassword);
+        snprintf(query, sizeof(query), "INSERT INTO USERS (username, password) VALUES ('%s', '%s')", username, password);
 
         if (mysql_query(con, query)) {
                 finish_with_error(con);
