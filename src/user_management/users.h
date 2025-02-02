@@ -16,11 +16,10 @@ struct user {
 };
 
 
-MYSQL *connexionDb(void);
+MYSQL *connexionDb();
 void finish_with_error(MYSQL *con);
 int userExist(MYSQL *con, const char *username);
 int createAccount(void);
-
-void hashPassword(const char *password, char *hashedPassword);
+char *hashPassword() 
 
 #endif 

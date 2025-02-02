@@ -71,4 +71,5 @@ void deconnexionUser() {
     free(currentUser);
     currentUser = NULL;
     printf("Au revoir !\n");
+    return EXIT_SUCCESS;
 }

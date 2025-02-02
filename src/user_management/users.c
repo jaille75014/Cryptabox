@@ -26,13 +26,13 @@ MYSQL *connexionDb() {
       exit(1);
   }
 
-  if (mysql_real_connect(con, "192.168.1.36", "ajr3mousquetaires", "AJR3MOUSQUETAIRES", "CRYPTABOX", 0, NULL, 0) == NULL) {
+  if (mysql_real_connect(con, SERVER, "ajr3mousquetaires", "AJR3MOUSQUETAIRES", "CRYPTABOX", 0, NULL, 0) == NULL) {
         finish_with_error(con);
         }
   return con;
 }
 
-char hashPassword() {
+char *hashPassword() {
     const char* passwordToHash = NULL;
     char* hash = NULL;
 
@@ -47,29 +47,38 @@ char hashPassword() {
     return 0;
 }
 
-int userExist(MYSQL *con, char *username) {
-        int nameExist = 0;
-        int exist = 0;
-    nameExist = mysql_query(conn, "SELECT COUNT(*) FROM USERS WHERE name='%s'", username)
-    if (nameExist != 0) {
-        return exist = 1;
-    } else {
-        return exist = 0;
+int userExist(MYSQL *con, const char *username) {
+    char query[256];
+    int exist = 0;
+    snprintf(query, sizeof(query), "SELECT COUNT(*) FROM USERS WHERE username='%s'", username);
+    if (mysql_query(con, query)) {
+        finish_with_error(con);
     }
+
+    MYSQL_RES *result = mysql_store_result(con);
+    if (result == NULL) {
+        finish_with_error(con);
+    }
+    MYSQL_ROW row = mysql_fetch_row(result);
+    int count = atoi(row[0]);
+    mysql_free_result(result);
+
+    return exist;
 }
 
 void createAccount(){
-	int id;
+    MYSQL *con = connexionDb();
     int isExist;
     char username[MAX_USERNAME];
 	char *password;
     
-    printf("Entrez votre identifiant :\n=> ");
+    printf("Entrez votre identifiant (max %d caractères) :\n=> ", MAX_USERNAME - 1);
     scanf("%s", username);
+    fflush(stdin);
 
-	isExist = userExist(connexionDb(), username);
+	isExist = userExist(con, username);
 
-    if (isExist == 1) {
+    if (isExist > 0) {
         printf("Bah alors on pert la boule ? En même temps c'est vrai que ce projet donne mal à la tête...\n");
         mysql_close(con);
         return EXIT_FAILURE;
@@ -80,9 +89,12 @@ void createAccount(){
         snprintf(query, sizeof(query), "INSERT INTO USERS (username, password) VALUES ('%s', '%s')", username, password);
 
         if (mysql_query(con, query)) {
-                finish_with_error(con);
+            free(password);
+            finish_with_error(con);
         }
 
         printf("Votre compte a ete créé avec succès, vous pouvez vous connecter\n");
+        free(password);
         mysql_close(con);
+        return EXIT_SUCCESS;
 }
