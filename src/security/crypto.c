@@ -9,19 +9,14 @@
 
 
 int generateKeyAndIV(unsigned char *key, unsigned char *iv) {
-
     printf("Veuillez entrer la clé de chiffrement : ");
-    
-    char command[256];
-    snprintf(command, sizeof(command), "Entrée de la clé de chiffrement : %s", key);
-    logCommandToDatabase(command);
 
     if (scanf("%32s", key) != 1) {
         fprintf(stderr, "Erreur de lecture de la clé\n");
         return 0;
     }
 
-    if (strlen((const char*)key) != 32) {
+    if (strlen((const char *)key) != 32) {
         fprintf(stderr, "La clé doit faire 32 caractères !\n");
         return 0;
     }
@@ -35,20 +30,18 @@ int generateKeyAndIV(unsigned char *key, unsigned char *iv) {
 }
 
 int encryptFile(const char *input_file, const char *output_file, unsigned char *key, unsigned char *iv) {
-
     FILE *input = fopen(input_file, "rb");
-    if (input == NULL) {
+    if (!input) {
         fprintf(stderr, "Erreur d'ouverture de %s\n", input_file);
         return 0;
     }
 
     FILE *output = fopen(output_file, "wb");
-    if (output == NULL) {
+    if (!output) {
         fprintf(stderr, "Erreur d'ouverture de %s\n", output_file);
         fclose(input);
         return 0;
     }
-
 
     // Contexte de chiffrement : structure d'openSSL pour gérer le chiffrement
     EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
@@ -72,8 +65,7 @@ int encryptFile(const char *input_file, const char *output_file, unsigned char *
     unsigned char textChiffre[1024 + AES_BLOCK_SIZE]; // Tampon : stocker les données chiffrées et padding
     int nbrOctets, textChiffre_len;
 
-
-    while ((nbrOctets = fread(buffer, 1, 1024, input)) > 0) {
+    while ((nbrOctets = fread(buffer, 1, sizeof(buffer), input)) > 0) {
         if (EVP_EncryptUpdate(ctx, textChiffre, &textChiffre_len, buffer, nbrOctets) != 1) {
             fprintf(stderr, "Erreur de chiffrement\n");
             EVP_CIPHER_CTX_free(ctx);
@@ -112,25 +104,22 @@ int encryptFile(const char *input_file, const char *output_file, unsigned char *
     return 1;
 }
 
-
-
 int decryptFile(const char *input_file, const char *output_file, unsigned char *key, unsigned char *iv) {
-
     FILE *input = fopen(input_file, "rb");
-    if (input == NULL) {
+    if (!input) {
         fprintf(stderr, "Erreur d'ouverture de %s\n", input_file);
         return 0;
     }
 
     FILE *output = fopen(output_file, "wb");
-    if (output == NULL) {
+    if (!output) {
         fprintf(stderr, "Erreur d'ouverture de %s\n", output_file);
         fclose(input);
         return 0;
     }
 
     EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
-    if (ctx == NULL) {
+    if (!ctx) {
         fprintf(stderr, "Erreur de création du contexte de déchiffrement\n");
         fclose(input);
         fclose(output);
@@ -145,20 +134,19 @@ int decryptFile(const char *input_file, const char *output_file, unsigned char *
         return 0;
     }
 
-
     unsigned char buffer[1024]; // Tampon : lire les données chiffrées
     unsigned char textDechiffre[1024 + EVP_MAX_BLOCK_LENGTH]; // Tampon : stocker les données déchiffrées et padding
     int nbrOctets, text_len;
 
-    while ((nbrOctets = fread(buffer, 1, 1024, input)) > 0) {
-        if (EVP_DecryptUpdate(ctx, textDechiffre, &text_len, buffer, nbrOctets) != 1) {
+    while ((nbrOctets = fread(buffer, 1, sizeof(buffer), input)) > 0) {
+        if (EVP_DecryptUpdate(ctx, textDechiffre, &textDechiffre_len, buffer, nbrOctets) != 1) {
             fprintf(stderr, "Erreur de déchiffrement\n");
             EVP_CIPHER_CTX_free(ctx);
             fclose(input);
             fclose(output);
             return 0;
         }
-        if (fwrite(textDechiffre, 1, text_len, output) != text_len) {
+        if (fwrite(textDechiffre, 1, textDechiffre_len, output) != textDechiffre_len) {
             fprintf(stderr, "Erreur d'écriture dans le fichier de sortie\n");
             EVP_CIPHER_CTX_free(ctx);
             fclose(input);
@@ -167,7 +155,7 @@ int decryptFile(const char *input_file, const char *output_file, unsigned char *
         }
     }
 
-    if (EVP_DecryptFinal_ex(ctx, textDechiffre, &text_len) != 1) {
+    if (EVP_DecryptFinal_ex(ctx, textDechiffre, &textDechiffre_len) != 1) {
         fprintf(stderr, "Erreur de finalisation du déchiffrement\n");
         EVP_CIPHER_CTX_free(ctx);
         fclose(input);
@@ -175,7 +163,7 @@ int decryptFile(const char *input_file, const char *output_file, unsigned char *
         return 0;
     }
 
-    if (fwrite(textDechiffre, 1, text_len, output) != text_len) {
+    if (fwrite(textDechiffre, 1, textDechiffre_len, output) != textDechiffre_len) {
         fprintf(stderr, "Erreur d'écriture finale dans le fichier de sortie\n");
         EVP_CIPHER_CTX_free(ctx);
         fclose(input);
