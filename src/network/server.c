@@ -9,6 +9,10 @@
 typedef struct sockaddr_in SOCKADDR_IN; // sockaddr_in est une structure définie dans <netinet/in.h> permettant de caractérisé notre socket ensuite avec bind()
 
 int server(){
+    ssize_t receivedBytes;
+    char buffer[1024];
+    char fileName[100] = {0};
+
 
     char maxClient=1;
 
@@ -34,34 +38,52 @@ int server(){
 
     if(listen(socketServer,maxClient)==-1){ // Listen permet de mettre en écoute le serveur
         fprintf(stderr, "Impossible d'écouter les connexions entrantes\n");
+        close(socketServer);
         exit(EXIT_FAILURE);
     }
 
-    printf("En attente de nouvelles connexions.\n");
+    printf("En attente de nouvelles connexions...\n");
 
     socklen_t addrlen = sizeof(socketAddress);
-    int socketClient = accept(socketServer, (struct sockaddr*)&socketAddress, &addrlen);
 
 
-    if(socketClient==-1){
+    if((socketClient= accept(socketServer, (struct sockaddr*)&socketAddress, &addrlen);)==-1){
         fprintf(stderr,"Erreur à la connexion entre le client et le serveur.\n");
+        close(socketServer);
         exit(EXIT_FAILURE);
     }
 
-    printf("Transfert du fichier en cours.\n");
+    printf("Client connecté ! Le fichier est en cours de réception...\n");
 
 
-    char buffer[1024]={0};
-    int receivedBytes= recv(socketClient,buffer,1024,0);
-    
-    if (receivedBytes==-1){
-        fprintf(stderr,"Erreur lors de réception du fichier.\n");
+    if (recv(socketClient, fileName, FILENAME_SIZE, 0) ==-1){
+        fprintf(stderr,"Erreur lors de réception du nom du fichier.\n");
+        close(socketClient);
+        close(socketServer);
         exit(EXIT_FAILURE);
-
     }
 
-    printf("Client : %s", buffer);
+    FILE *file = NULL;
+    if((file=fopen((fileName,"wb"))==NULL)){
+        fprintf(stderr,"Erreur lors de la création du fichier");
+        close(socketClient);
+        close(socketServer);
+        exit(EXIT_FAILURE);
+    }
 
+    while ((receivedBytes = recv(socketClient, buffer, BUFFER_SIZE, 0)) > 0) {
+        fwrite(buffer, 1, receivedBytes, file);
+    }
+
+    if (receivedBytes == -1) {
+        fprintf(stderr,"Erreur lors de la réception du fichier");
+    } else {
+        printf("Fichier reçu avec succès.\n");
+    }
+
+
+
+    fclose(file);
     close(socketServer);
     close(socketClient);
 
