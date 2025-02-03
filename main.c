@@ -113,7 +113,15 @@ int main() {
                 printf("\nÉchec du déchiffrement\n");
             }
             
-        }else if(strcmp(command,"quit")==0){
+        }else if (strcmp(command,"send")){
+
+            client();
+            
+
+        }
+        
+        
+        else if(strcmp(command,"quit")==0){
             printf("\nbye :)"); 
             
             exit(EXIT_SUCCESS);

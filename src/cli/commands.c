@@ -21,13 +21,3 @@ void init_cli() {
 }
 
 
-
-void encrypt_file(const char *filename) {
-    printf("Chiffrement du fichier : %s\n", filename);
-    // Simulation du chiffrement
-}
-
-void decrypt_file(const char *filename) {
-    printf("Déchiffrement du fichier : %s\n", filename);
-    // Simulation du déchiffrement
-}
