@@ -20,11 +20,11 @@ void printMenu(){
     printf("               /____/  /_/                                       \n");
 
 
-    printf("\n1. crypt [fic] : Crypter un fichier avec l'aide d'un mot de passe.
+    printf("\n1. chiffre : Crypter un fichier avec l'aide d'un mot de passe.
     \n2. dechiffre [fic] : Décrypter un fichier avec l'aide d'un mot de passe.
-    \n3. send [fic] [IP] : Envoyer un fichier sur une machine distante.
-    \n4. receive : Accepter de recevoir un fihier.
-    \n5. quit : Quitter.");
+    \n3. envoyer [fic] [IP] : Envoyer un fichier sur une machine distante.
+    \n4. recevoir : Accepter de recevoir un fihier.
+    \n5. quitter : Quitter.");
 
 }
 
@@ -116,7 +116,7 @@ int main() {
                 printf("\nÉchec du déchiffrement\n");
             }
             
-        }else if (strcmp(command,"send")==0){
+        }else if (strcmp(command,"envoyer")==0){
 
             
             while(line[i]==' '){
@@ -160,11 +160,11 @@ int main() {
             client(file,IP);
             
 
-        } else if(strcmp(command,"receive")==0){
+        } else if(strcmp(command,"recevoir")==0){
             receive();
 
 
-        } else if(strcmp(command,"quit")==0){
+        } else if(strcmp(command,"quitter")==0){
             printf("\nbye :)"); 
             
             exit(EXIT_SUCCESS);
