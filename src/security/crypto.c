@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "crypto.h"
+#include "../user_management/history.c"
 
 
 int generateKeyAndIV(unsigned char *key, unsigned char *iv) {

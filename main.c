@@ -20,8 +20,8 @@ void printMenu(){
     printf("               /____/  /_/                                       \n");
 
 
-    printf("\n1. chiffre : Crypter un fichier avec l'aide d'un mot de passe.
-    \n2. dechiffre [fic] : Décrypter un fichier avec l'aide d'un mot de passe.
+    printf("\n1. chiffre : Chiffrer un fichier avec l'aide d'un mot de passe.
+    \n2. dechiffre : Déchiffrer un fichier avec l'aide d'un mot de passe.
     \n3. envoyer [fic] [IP] : Envoyer un fichier sur une machine distante.
     \n4. recevoir : Accepter de recevoir un fihier.
     \n5. quitter : Quitter.");
