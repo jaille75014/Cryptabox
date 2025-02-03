@@ -21,3 +21,9 @@ Avant d'exécuter ce projet, vous devez avoir les outils suivants installés sur
 Sur Debian/Ubuntu :
 ```bash
 sudo apt-get install libssl-dev
+```
+### Installation de la librairie mysql : 
+sur Debian/Ubuntu :
+```bash
+sudo apt install libmysqlclient-dev
+```
