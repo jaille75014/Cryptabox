@@ -29,6 +29,7 @@ void printMenu(){
 }
 
 int main() {
+    int i;
 
     short int isConnected = 0;
     do {    
@@ -68,6 +69,8 @@ int main() {
 
         char line[200]={" "};
         char command[50]={" "};
+        char file[100]={" "};
+        char IP[15]={''};
 
         fflush(stdin);
 
@@ -76,7 +79,7 @@ int main() {
         printf("\nVotre action : ");
         scanf("%[^\n]",line);
 
-        for(int i=0; (line[i]!=' ' && line[i]!='\0');++i){
+        for(i=0; (line[i]!=' ' && line[i]!='\0');++i){
             command[i]=line[i];
         }
         logCommandToDatabase(command);
@@ -113,15 +116,55 @@ int main() {
                 printf("\nÉchec du déchiffrement\n");
             }
             
-        }else if (strcmp(command,"send")){
+        }else if (strcmp(command,"send")==0){
 
-            client();
+            
+            while(line[i]==' '){
+                i++;
+            }
+
+            if(line[i]=='\0'){
+                fprintf(stderr,"\nVeuillez entrer un nom de fichier.");
+                continue; 
+            }
+
+            int j=0;
+            
+            for(; (line[i]!=' ' && line[i]!='\0');++i){
+                file[j]=line[i];
+                j++;
+            }
+
+            
+            while(line[i]==' '){
+                i++;
+            }
+
+            if(line[i]=='\0'){
+                fprintf(stderr,"\nVeuillez entrer une IP valide.");
+                continue; 
+            }
+
+            j=0;
+
+            for(; (line[i]!=' ' && line[i]!='\0');++i){
+                IP[j]=line[i];
+                j++;
+            }
+
+
+
+
+            printf("\nLe fichier que vous souhaitez envoyer est : %s à l'hôte %s : ", file,IP);
+
+            client(file,IP);
             
 
-        }
-        
-        
-        else if(strcmp(command,"quit")==0){
+        } else if(strcmp(command,"receive")==0){
+            receive();
+
+
+        } else if(strcmp(command,"quit")==0){
             printf("\nbye :)"); 
             
             exit(EXIT_SUCCESS);

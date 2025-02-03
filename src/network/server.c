@@ -12,9 +12,8 @@ int server(){
 
     char maxClient=1;
 
-    int socketServer = socket(AF_INET,SOCK_STREAM,0); // https://man7.org/linux/man-pages/man2/socket.2.html
 
-    if(socketServer==-1){
+    if((socketServer= socket(AF_INET,SOCK_STREAM,0);)==-1){
         fprintf(stderr,"Erreur à l'initialisation du socket.\n");
         exit(EXIT_FAILURE);
     }
@@ -27,6 +26,7 @@ int server(){
 
     if(bind(socketServer, (struct sockaddr *) &socketAddress,sizeof(socketAddress))==-1){
         fprintf(stderr,"Erreur lors de la liaison entre le socket et ses paramètres.\n");
+        close(socketServer);
         exit(EXIT_FAILURE);
     }
 
