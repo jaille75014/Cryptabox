@@ -20,6 +20,6 @@ MYSQL *connexionDb();
 void finish_with_error(MYSQL *con);
 int userExist(MYSQL *con, const char *username);
 int createAccount(void);
-char *hashPassword() 
+char *hashPassword(); 
 
 #endif 
