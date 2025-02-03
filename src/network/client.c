@@ -15,6 +15,8 @@ typedef struct sockaddr_in SOCKADDR_IN; // sockaddr_in est une structure défini
 int client(char fileName[100], char IP[15]){
 
     FILE *file = openFile(fileName);
+    int socketClient;
+
 
 
 
@@ -49,10 +51,7 @@ int client(char fileName[100], char IP[15]){
 
     printf("Connexion établie avec %s. Envoi du fichier en cours !\n", IP);
     
-    if (send(socketClient,"TESTT",strlen("TESTT"),0)==-1){
-        fprintf(stderr,"Erreur lors de réceptil'envoie du fichier.\n");
-        exit(EXIT_FAILURE);
-    }
+    sendFile(socketClient, file, fileName);
 
     fclose(file);
     file=NULL;
