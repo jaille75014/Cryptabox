@@ -10,9 +10,9 @@
 #define MAX_USERNAME 50
 #define PASSWORD_MAX_LENGTH 256
 #define HASH_SIZE 65
-#define SERVER "localhost"
-#define USERNAME "AJR3MOUSQUETAIRES"
-#define PASSWORD "MonSuperMotDePasse"
+#define SERVER "192.168.1.36"
+#define USERNAME "ajr3mousquetaires"
+#define PASSWORD "AJR3MOUSQUETAIRES"
 
 user *currentUser = NULL;
 
