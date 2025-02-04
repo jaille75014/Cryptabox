@@ -1,3 +1,3 @@
 #include "global.h"
 
-User currentUser = NULL;
+user *currentUser = NULL;

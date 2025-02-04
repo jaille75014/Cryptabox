@@ -8,6 +8,7 @@
 
 #include <mysql/mysql.h>
 
-int connexionUser(void);
+int connexionUser();
+void deconnexionUser();
 
 #endif /* AUTH_H */

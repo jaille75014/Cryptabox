@@ -3,6 +3,7 @@
         "*.embeddedhtml": "html",
         "encrypt.h": "c",
         "auth.h": "c",
-        "users.h": "c"
+        "users.h": "c",
+        "sha.h": "c"
     }
 }

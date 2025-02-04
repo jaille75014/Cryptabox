@@ -20,11 +20,11 @@ void printMenu(){
     printf("               /____/  /_/                                       \n");
 
 
-    printf("\n1. chiffre : Chiffrer un fichier avec l'aide d'un mot de passe.
-    \n2. dechiffre : Déchiffrer un fichier avec l'aide d'un mot de passe.
-    \n3. envoyer [fic] [IP] : Envoyer un fichier sur une machine distante.
-    \n4. recevoir : Accepter de recevoir un fihier.
-    \n5. quitter : Quitter.");
+    printf("\n1. chiffre : Chiffrer un fichier avec l'aide d'un mot de passe.\n");
+    printf("2. dechiffre : Déchiffrer un fichier avec l'aide d'un mot de passe.\n");
+    printf("3. envoyer [fic] [IP] : Envoyer un fichier sur une machine distante.\n");
+    printf("4. recevoir : Accepter de recevoir un fichier.\n");
+    printf("5. quitter : Quitter.\n");
 
 }
 
@@ -70,7 +70,7 @@ int main() {
         char line[200]={" "};
         char command[50]={" "};
         char file[100]={" "};
-        char IP[15]={''};
+        char IP[15]={""};
 
         fflush(stdin);
 
@@ -175,7 +175,6 @@ int main() {
     
 
     } while(1);
-
 
     exit(EXIT_SUCCESS);
 }

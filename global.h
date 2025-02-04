@@ -3,6 +3,6 @@
 
 #include "src/user_management/users.h"  
 
-extern user currentUser;
+extern user *currentUser;
 
 #endif /* GLOBAL_H */
