@@ -58,7 +58,6 @@ char *hashPassword() {
         return NULL;
     }
     
-    scanf("%s", password);
 
     
     
@@ -97,7 +96,10 @@ void createAccount(){
 	char *password;
     
     printf("Entrez votre identifiant (max %d caractères) :\n=> ", MAX_USERNAME - 1);
-    scanf("%s", username);
+    if (scanf("%49s", username) != 1) {
+        fprintf(stderr, "Identifiant incorrect ou trop long !\n");
+        return 0;
+    }
     fflush(stdin);
 
 	isExist = userExist(con, username);
