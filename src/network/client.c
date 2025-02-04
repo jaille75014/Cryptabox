@@ -13,8 +13,10 @@ typedef struct sockaddr_in SOCKADDR_IN; // sockaddr_in est une structure défini
 
 
 int client(char fileName[100], char IP[15]){
+    FILE *file=NULL;
 
-    FILE *file = openFile(fileName);
+    file=openFile(fileName);
+
     int socketClient;
 
 
@@ -32,7 +34,7 @@ int client(char fileName[100], char IP[15]){
     socketAddress.sin_family=AF_INET; // TCP    
     socketAddress.sin_port=14972 ; // On écoute sur le port 14972
 
-    if(inet_aton("127.0.0.1",&socketAddress.sin_addr)!=1){ 
+    if(inet_aton(IP,&socketAddress.sin_addr)!=1){ 
         fprintf(stderr,"Adresse IP invalide.\n");
         fclose(file);
         file=NULL;
@@ -70,7 +72,7 @@ FILE *openFile(char fileName[100]) {
     FILE *file = NULL;
 
     if ((file=fopen(fileName, "rb"))==NULL) {
-        fprintf(stderr,"Erreur lors de l'ouverture du fichier.");
+        fprintf(stderr,"Erreur lors de l'ouverture du fichier.\n");
         exit(EXIT_FAILURE);
     }
     return file;
@@ -80,7 +82,7 @@ FILE *openFile(char fileName[100]) {
 void sendFile(int socketClient, FILE *file, const char *fileName) {
 
     if (send(socketClient, fileName, 100, 0) == -1) {
-        fprintf(stderr,"Erreur lors de l'envoi du nom du fichier");
+        fprintf(stderr,"Erreur lors de l'envoi du nom du fichier\n");
         fclose(file);
         file=NULL;
         close(socketClient);
@@ -90,13 +92,29 @@ void sendFile(int socketClient, FILE *file, const char *fileName) {
 
     char buffer[1024];
     size_t bytesRead;
-    while ((bytesRead = fread(buffer, 1, sizeof(buffer), file)) > 0) {
+    /*while ((bytesRead = fread(buffer, 1, sizeof(buffer), file)) > 0) {
         if (send(socketClient, buffer, bytesRead, 0) == -1) {
-            fprintf(stderr,"Erreur lors de l'envoi du fichier");
+            fprintf(stderr,"Erreur lors de l'envoi du fichier\n");
             fclose(file);
             file=NULL;
             close(socketClient);
             exit(EXIT_FAILURE);
+        }
+    }*/
+
+    // A modif
+
+     while ((bytesRead = fread(buffer, 1, sizeof(buffer), file)) > 0) {
+        size_t totalSent = 0;
+        while (totalSent < bytesRead) {
+            ssize_t sent = send(socketClient, buffer + totalSent, bytesRead - totalSent, 0);
+            if (sent == -1) {
+                perror("Erreur lors de l'envoi des données");
+                fclose(file);
+                close(socketClient);
+                exit(EXIT_FAILURE);
+            }
+            totalSent += sent;
         }
     }
 
