@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "crypto.h"
-#include "../user_management/history.c"
+#include "../user_management/history.h"
 
 int generateKeyAndIV(unsigned char *key, unsigned char *iv) {
     printf("Veuillez entrer la clé de chiffrement : ");

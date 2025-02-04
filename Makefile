@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -O2 -Wall -Wextra 
-CLIBS = -lm
+CLIBS = -lm -lmysqlclient -lssl -lcrypto
 EXE = Cryptabox
 OBJ = obj/
 SRC = src/
@@ -16,7 +16,7 @@ $(OBJ):
 	mkdir -p $(OBJ)cli $(OBJ)network $(OBJ)security $(OBJ)user_management
 
 $(EXE) : $(FILEO)
-	$(CC) $(CFLAGS) -o $@ $^ $(CLIBS)
+	$(CC) $(CFLAGS) -o $@ $^ $(CLIBS) 
 
 $(OBJ)main.o : $(SRC)main.c $(FILEH)
 	$(CC) $(CFLAGS) -o $@ -c $<

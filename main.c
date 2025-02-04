@@ -3,7 +3,7 @@
 #include <string.h>
 #include "src/cli/commands.h"
 #include "src/security/crypto.h"
-#include "src/security/crypto.c"
+
 
 #include "src/user_management/auth.h"
 #include "src/user_management/users.h"
@@ -96,7 +96,7 @@ int main() {
             }
 
             if (encryptFile(file, "chiffre.txt", key, iv)) {
-                printf("\nFichier chiffré avec succès !\n");
+               printf("\nFichier chiffré avec succès !\n");
             } else {
                 printf("\nÉchec du chiffrement\n");
             }
@@ -110,7 +110,7 @@ int main() {
                 continue;
             }
 
-            if (dechiffreFile(file, "dechiffre.txt", key, iv)) {
+            if (decryptFile(file, "dechiffSre.txt", key, iv)) {
                 printf("\nFichier déchiffré avec succès !\n");
             } else {
                 printf("\nÉchec du déchiffrement\n");
