@@ -18,7 +18,10 @@ int connexionUser() {
 
 
     printf("Entrez votre identifiant :\n=> ");
-    scanf("%s", username);
+    if (scanf("%49s", username) != 1) {
+        fprintf(stderr, "Identifiant incorrect ou trop long !\n");
+        return 0;
+    }
 
      char *hashedPassword = hashPassword();
      char safeUsername[MAX_USERNAME * 2];

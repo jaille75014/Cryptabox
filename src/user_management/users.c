@@ -52,7 +52,15 @@ char *hashPassword() {
     }
 
     printf("Entrez votre mot de passe :\n");
+    if (scanf("%255s", password) != 1) {
+        fprintf(stderr, "Erreur de lecture du mot de passe.\n");
+        free(passwordHash);
+        return NULL;
+    }
+    
     scanf("%s", password);
+
+    
     
     SHA256((unsigned char *)password, strlen(password), hash);
 
