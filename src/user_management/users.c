@@ -94,6 +94,7 @@ void createAccount(){
     char username[MAX_USERNAME];
     char *password;
 
+    do {
     printf("Entrez votre identifiant (max %d caractères) :\n=> ", MAX_USERNAME - 1);
     if (scanf("%49s", username) != 1) {
         fprintf(stderr, "Identifiant incorrect ou trop long !\n");
@@ -101,7 +102,7 @@ void createAccount(){
         continue;
         return;
     }
-    fflush(stdin);
+    } while (strlen(username) == 0 || strlen(username) >= MAX_USERNAME);
 
     isExist = userExist(con, username);
 

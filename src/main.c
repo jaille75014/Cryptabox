@@ -40,7 +40,8 @@ int main() {
             while (getchar() != '\n');
             continue;
         }
-
+        while(getchar() != '\n');
+        
         for (i = 0; (line[i] != ' ' && line[i] != '\0'); ++i) {
             command[i] = line[i];
         }
@@ -56,7 +57,7 @@ int main() {
             deconnexionUser();
             exit(EXIT_SUCCESS);
         } else if (strcmp(command, "menu") == 0) {
-            printMenu();
+            init_cli();
         } else {
             printf("Erreur : commande inconnue\n");
         }
