@@ -8,7 +8,7 @@
 
 typedef struct sockaddr_in SOCKADDR_IN; // sockaddr_in est une structure définie dans <netinet/in.h> permettant de caractérisé notre socket ensuite avec bind()
 
-int server(){
+int receive(){
     ssize_t receivedBytes;
     int socketServer, socketClient;
     char buffer[1024];

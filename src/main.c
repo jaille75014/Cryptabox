@@ -3,8 +3,8 @@
 #include <string.h>
 #include "cli/commands.h"
 #include "security/crypto.h"
-//#include "network/client.h"
-//#include "network/server.h"
+#include "network/client.h"
+#include "network/server.h"
 
 
 #include "user_management/auth.h"
@@ -41,7 +41,11 @@ int main() {
         fflush(stdin); 
         
         printf("=> ");
-        scanf("%[^\n]",line);
+        if(scanf("%[^\n]",line)!=1){
+            fprintf(stderr, "Erreur lors de la lecture de l'entrée.\n");
+            continue;
+        }
+        
         for(int i=0; (line[i]!=' ' && line[i]!='\0');++i){
             command[i]=line[i];
         }
@@ -79,7 +83,12 @@ int main() {
         printMenu();
 
         printf("\nVotre action : ");
-        scanf("%[^\n]",line);
+        
+
+        if(scanf("%[^\n]",line)!=1){
+            fprintf(stderr, "Erreur lors de la lecture de l'entrée.\n");
+            continue;
+        }
 
         for(i=0; (line[i]!=' ' && line[i]!='\0');++i){
             command[i]=line[i];
@@ -90,7 +99,10 @@ int main() {
 
         if (strcmp(command, "crypt") == 0) {
             printf("\nEntrez le fichier à crypter : ");
-            scanf("%s", file);
+            if(scanf("%s", file)){
+                fprintf(stderr, "Erreur lors de la lecture de l'entrée.\n");
+                continue;
+            }
             
             if (!generateKeyAndIV(key, iv)) {
                 printf("\nErreur de génération : clé et/ou vecteur d'initialisation incorrects\n");
@@ -105,7 +117,12 @@ int main() {
 
         } else if (strcmp(command, "decrypt") == 0) {
             printf("\nEntrez le fichier à déchiffrer : ");
-            scanf("%s", file);
+            
+
+            if(scanf("%s", file)){
+                fprintf(stderr, "Erreur lors de la lecture de l'entrée.\n");
+                continue;
+            }
             
             if (!generateKeyAndIV(key, iv)) {
                 printf("\nErreur de génération : clé et/ou vecteur d'initialisation incorrects\n");
@@ -121,7 +138,7 @@ int main() {
         }else if (strcmp(command,"send")==0){
 
             
-            /*while(line[i]==' '){
+            while(line[i]==' '){
                 i++;
             }
 
@@ -159,13 +176,13 @@ int main() {
 
             printf("\nLe fichier que vous souhaitez envoyer est : %s à l'hôte %s : ", file,IP);
 
-            client(file,IP);*/
+            client(file,IP);
 
 
             
 
         } else if(strcmp(command,"receive")==0){
-            //receive();
+            receive();
 
 
         } else if(strcmp(command,"quit")==0){
