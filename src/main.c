@@ -1,14 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "src/cli/commands.h"
-#include "src/security/crypto.h"
+#include "cli/commands.h"
+#include "security/crypto.h"
+//#include "network/client.h"
+//#include "network/server.h"
 
 
-#include "src/user_management/auth.h"
-#include "src/user_management/users.h"
+#include "user_management/auth.h"
+#include "user_management/users.h"
 
-#include "src/user_management/history.h"
+#include "user_management/history.h"
 
 void printMenu(){
 
@@ -119,7 +121,7 @@ int main() {
         }else if (strcmp(command,"envoyer")==0){
 
             
-            while(line[i]==' '){
+            /*while(line[i]==' '){
                 i++;
             }
 
@@ -157,11 +159,13 @@ int main() {
 
             printf("\nLe fichier que vous souhaitez envoyer est : %s à l'hôte %s : ", file,IP);
 
-            client(file,IP);
+            client(file,IP);*/
+
+
             
 
         } else if(strcmp(command,"recevoir")==0){
-            receive();
+            //receive();
 
 
         } else if(strcmp(command,"quitter")==0){
