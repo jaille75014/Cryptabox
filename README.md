@@ -16,7 +16,7 @@ Avant d'exécuter ce projet, vous devez avoir les outils suivants installés sur
 - Un compilateur C (ex : GCC)
 - La bibliothèque OpenSSL pour les fonctions de chiffrement
 
-### Installation d'OpenSSL (si nécessaire)
+### Installation d'OpenSSL 
 
 Sur Debian/Ubuntu :
 ```bash
