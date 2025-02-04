@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "src/cli/commands.h"
-// #include "src/security/crypto.h"
-// #include "src/security/crypto.c"
+#include "src/security/crypto.h"
+#include "src/security/crypto.c"
 
 #include "src/user_management/auth.h"
 #include "src/user_management/users.h"
@@ -60,7 +60,7 @@ int main() {
             printf("Erreur : commande inconnue.\n");
         }
     } while (isConnected == 0);
-/*
+
     unsigned char key[32];
     unsigned char iv[AES_BLOCK_SIZE];
 
@@ -175,6 +175,6 @@ int main() {
     
 
     } while(1);
-*/
+
     exit(EXIT_SUCCESS);
 }
