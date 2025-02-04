@@ -34,7 +34,7 @@ int main() {
         char line[200] = { " " };
         char command[50] = { " " };
 
-        printf("=> ");
+        printf("\n=> ");
         if (scanf("%[^\n]", line) != 1) {
             fprintf(stderr, "Erreur de saisie\n");
             while (getchar() != '\n');
@@ -154,7 +154,7 @@ int main() {
             receive();
 
         } else if (strcmp(command, "quit") == 0) {
-            printf("\nbye :)");
+            deconnexionUser();
             exit(EXIT_SUCCESS);
         }
 

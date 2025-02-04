@@ -51,16 +51,16 @@ char *hashPassword() {
         return NULL;
     }
 
-    printf("Entrez votre mot de passe :\n");
+    printf("Entrez votre mot de passe :\n=> ");
     if (scanf("%255s", password) != 1) {
         fprintf(stderr, "Erreur de lecture du mot de passe.\n");
         free(passwordHash);
+        while (getchar() != '\n')
+        continue;
         return NULL;
     }
-    
-
-    
-    
+    while (getchar() != '\n')
+    continue;
     SHA256((unsigned char *)password, strlen(password), hash);
 
     for (int i = 0; i < SHA256_DIGEST_LENGTH; i++) {
@@ -72,7 +72,7 @@ char *hashPassword() {
 
 int userExist(MYSQL *con, const char *username) {
     char query[256];
-    snprintf(query, sizeof(query), "SELECT COUNT(*) FROM USERS WHERE username='%s'", username);
+    snprintf(query, sizeof(query), "SELECT COUNT(*) FROM USERS WHERE name='%s'", username);
     if (mysql_query(con, query)) {
         finish_with_error(con);
     }
@@ -97,6 +97,8 @@ void createAccount(){
     printf("Entrez votre identifiant (max %d caractères) :\n=> ", MAX_USERNAME - 1);
     if (scanf("%49s", username) != 1) {
         fprintf(stderr, "Identifiant incorrect ou trop long !\n");
+        while (getchar() != '\n')
+        continue;
         return;
     }
     fflush(stdin);
@@ -112,7 +114,7 @@ void createAccount(){
     password = hashPassword();
 
     char query[512];
-    snprintf(query, sizeof(query), "INSERT INTO USERS (username, password) VALUES ('%s', '%s')", username, password);
+    snprintf(query, sizeof(query), "INSERT INTO USERS (name, password) VALUES ('%s', '%s')", username, password);
 
     if (mysql_query(con, query)) {
         free(password);
