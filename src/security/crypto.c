@@ -16,6 +16,7 @@ int generateKeyAndIV(unsigned char *key, unsigned char *iv) {
     }
 
     if (strlen((const char *)key) != 32) {
+        printf("%ld", strlen((const char *)key));
         fprintf(stderr, "La clé doit faire 32 caractères !\n");
         return 0;
     }
@@ -144,6 +145,7 @@ int decryptFile(const char *input_file, const char *output_file, unsigned char *
             fclose(output);
             return 0;
         }
+
         if (fwrite(textDechiffre, 1, textDechiffre_len, output) != textDechiffre_len) {
             fprintf(stderr, "Erreur d'écriture dans le fichier de sortie\n");
             EVP_CIPHER_CTX_free(ctx);

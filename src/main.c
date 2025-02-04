@@ -41,7 +41,7 @@ int main() {
             continue;
         }
         while(getchar() != '\n');
-        
+
         for (i = 0; (line[i] != ' ' && line[i] != '\0'); ++i) {
             command[i] = line[i];
         }
@@ -116,7 +116,7 @@ int main() {
                 continue;
             }
 
-            if (decryptFile(file, "dechiffSre.txt", key, iv)) {
+            if (decryptFile(file, "dechiffre.txt", key, iv)) {
                 printf("\nFichier déchiffré avec succès !\n");
             } else {
                 printf("\nÉchec du déchiffrement\n");
