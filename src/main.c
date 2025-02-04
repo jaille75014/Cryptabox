@@ -51,13 +51,13 @@ int main() {
         }
         logCommandToDatabase(command);
 
-        if(strcmp(command, "connexion") == 0){
+        if(strcmp(command, "login") == 0){
             printf("Vous avez choisi de vous connecter.\n");
             isConnected = connexionUser();
-        } else if (strcmp(command, "inscription") == 0) {
+        } else if (strcmp(command, "register") == 0) {
             printf("Vous avez choisi de vous inscrire.\n");
             createAccount();
-        } else if (strcmp(command, "quitter") == 0) {
+        } else if (strcmp(command, "quit") == 0) {
             deconnexionUser();
             exit(EXIT_SUCCESS);
         } else if (strcmp(command, "menu") == 0) {
