@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -O2 -Wall -Wextra -Werror
+CFLAGS = -O2 -Wall -Wextra 
 CLIBS = -lm
 EXE = Cryptabox
 OBJ = obj/
