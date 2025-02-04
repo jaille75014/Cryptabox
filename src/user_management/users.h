@@ -24,4 +24,4 @@ int userExist(MYSQL *con, const char *username);
 void createAccount();
 char *hashPassword(); 
 
-#endif 
+#endif

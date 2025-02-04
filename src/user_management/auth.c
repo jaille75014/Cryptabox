@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "global.h"
+#include "../../global.h"
 #include <openssl/sha.h>
 #include <mysql/mysql.h>
 #include "auth.h"
@@ -10,7 +10,6 @@
 #define MAX_USERNAME 50
 #define PASSWORD_MAX_LENGTH 256
 
-user *currentUser = NULL;
 
 int connexionUser() {
     MYSQL *con = connexionDb(); 
@@ -67,5 +66,5 @@ void deconnexionUser() {
     free(currentUser);
     currentUser = NULL;
     printf("Au revoir !\n");
-    return EXIT_SUCCESS;
+    exit(EXIT_SUCCESS);
 }

@@ -7,7 +7,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include "users.h"
+#include <mysql/mysql.h>
+#include "auth.h"
+#include "history.h"
+#include "../../global.h"
 
+#define QUERY_SIZE 2048
 
 void logCommandToDatabase(const char *command) {
     if (currentUser == NULL) {
@@ -22,7 +27,7 @@ void logCommandToDatabase(const char *command) {
     }
     
     int userId;
-    char query[512];
+    char query[QUERY_SIZE];
     snprintf(query, sizeof(query),
             "SELECT id FROM USERS WHERE name='%s'",
             currentUser->username);
@@ -50,7 +55,7 @@ void logCommandToDatabase(const char *command) {
     char escapedCommand[1024];
     mysql_real_escape_string(con, escapedCommand, command, strlen(command)); 
 
-    snprintf(query, sizeof(query),
+    snprintf(query, QUERY_SIZE,
              "INSERT INTO HISTORY (user_id, command) VALUES (%d, '%s')",
                 userId,
                 escapedCommand

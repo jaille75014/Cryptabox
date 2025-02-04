@@ -4,6 +4,8 @@
 #include <mysql/mysql.h>
 #include "auth.h"
 #include "users.h"
+#include "../../global.h"
+
 
 #define MAX_USERNAME 50
 #define PASSWORD_MAX_LENGTH 256
@@ -12,6 +14,7 @@
 #define USERNAME "AJR3MOUSQUETAIRES"
 #define PASSWORD "MonSuperMotDePasse"
 
+user *currentUser = NULL;
 
 void finish_with_error(MYSQL *con)
 {
@@ -94,7 +97,7 @@ void createAccount(){
     if (isExist > 0) {
         printf("Bah alors on pert la boule ? En même temps c'est vrai que ce projet donne mal à la tête...\n");
         mysql_close(con);
-        return EXIT_FAILURE;
+        exit(EXIT_FAILURE);
     }
 	    password = hashPassword();
 
