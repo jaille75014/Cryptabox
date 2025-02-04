@@ -19,7 +19,7 @@ void printMenu() {
 
     printf("\n1. crypt : Chiffrer un fichier avec l'aide d'un mot de passe.\n");
     printf("2. decrypt : Déchiffrer un fichier avec l'aide d'un mot de passe.\n");
-    printf("3. send [fic] [IP] : Envoyer un fichier sur une machine distante.\n");
+    printf("3. send [file] [IP] : Envoyer un fichier sur une machine distante.\n");
     printf("4. receive : Accepter de recevoir un fichier.\n");
     printf("5. quit : Quitter.\n");
 }
@@ -41,7 +41,7 @@ int main() {
             continue;
         }
         while(getchar() != '\n');
-
+        
         for (i = 0; (line[i] != ' ' && line[i] != '\0'); ++i) {
             command[i] = line[i];
         }
@@ -123,7 +123,7 @@ int main() {
             }
 
         } else if (strcmp(command, "send") == 0) {
-            i = 0;
+            
             while (line[i] == ' ') i++;
             if (line[i] == '\0') {
                 fprintf(stderr, "\nVeuillez entrer un nom de fichier.");
@@ -148,7 +148,7 @@ int main() {
                 j++;
             }
 
-            printf("\nLe fichier que vous souhaitez envoyer est : %s à l'hôte %s : ", file, IP);
+            printf("\nLe fichier que vous souhaitez envoyer est : %s à l'hôte %s : \n", file, IP);
             client(file, IP);
 
         } else if (strcmp(command, "receive") == 0) {
