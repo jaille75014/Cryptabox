@@ -22,11 +22,11 @@ void printMenu(){
     printf("               /____/  /_/                                       \n");
 
 
-    printf("\n1. chiffre : Chiffrer un fichier avec l'aide d'un mot de passe.\n");
-    printf("2. dechiffre : Déchiffrer un fichier avec l'aide d'un mot de passe.\n");
-    printf("3. envoyer [fic] [IP] : Envoyer un fichier sur une machine distante.\n");
-    printf("4. recevoir : Accepter de recevoir un fichier.\n");
-    printf("5. quitter : Quitter.\n");
+    printf("\n1. crypt : Chiffrer un fichier avec l'aide d'un mot de passe.\n");
+    printf("2. decrypt : Déchiffrer un fichier avec l'aide d'un mot de passe.\n");
+    printf("3. send [fic] [IP] : Envoyer un fichier sur une machine distante.\n");
+    printf("4. receive : Accepter de recevoir un fichier.\n");
+    printf("5. quit : Quitter.\n");
 
 }
 
@@ -88,7 +88,7 @@ int main() {
 
 
 
-        if (strcmp(command, "chiffre") == 0) {
+        if (strcmp(command, "crypt") == 0) {
             printf("\nEntrez le fichier à crypter : ");
             scanf("%s", file);
             
@@ -103,7 +103,7 @@ int main() {
                 printf("\nÉchec du chiffrement\n");
             }
 
-        } else if (strcmp(command, "dechiffre") == 0) {
+        } else if (strcmp(command, "decrypt") == 0) {
             printf("\nEntrez le fichier à déchiffrer : ");
             scanf("%s", file);
             
@@ -118,7 +118,7 @@ int main() {
                 printf("\nÉchec du déchiffrement\n");
             }
             
-        }else if (strcmp(command,"envoyer")==0){
+        }else if (strcmp(command,"send")==0){
 
             
             /*while(line[i]==' '){
@@ -164,11 +164,11 @@ int main() {
 
             
 
-        } else if(strcmp(command,"recevoir")==0){
+        } else if(strcmp(command,"receive")==0){
             //receive();
 
 
-        } else if(strcmp(command,"quitter")==0){
+        } else if(strcmp(command,"quit")==0){
             printf("\nbye :)"); 
             
             exit(EXIT_SUCCESS);
