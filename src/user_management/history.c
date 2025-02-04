@@ -50,7 +50,6 @@ void logCommandToDatabase(const char *command) {
     char escapedCommand[1024];
     mysql_real_escape_string(con, escapedCommand, command, strlen(command)); 
 
-    char query[2048];
     snprintf(query, sizeof(query),
              "INSERT INTO HISTORY (user_id, command) VALUES (%d, '%s')",
                 userId,
@@ -75,7 +74,7 @@ CREATE TABLE HISTORY (
 CREATE TABLE USERS (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
-    password VARCHAR(50) NOT NULL
+    password VARCHAR(255) NOT NULL
     );
 
 */

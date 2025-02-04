@@ -1,37 +1,33 @@
 #include <stdio.h>
 #include <string.h>
-
+#include <stdlib.h>
 #include "global.h"
 #include <openssl/sha.h>
-#include <mysql.h>
+#include <mysql/mysql.h>
 #include "auth.h"
 #include "users.h"
 
 #define MAX_USERNAME 50
-#define MAX_PASSWORD 30
-#define HASH_SIZE 65
+#define PASSWORD_MAX_LENGTH 256
+
+user *currentUser = NULL;
 
 int connexionUser() {
     MYSQL *con = connexionDb(); 
 
     char username[MAX_USERNAME];
-    char password[MAX_PASSWORD];
-    char hashedPassword[HASH_SIZE];
+
 
     printf("Entrez votre identifiant :\n=> ");
     scanf("%s", username);
 
-    printf("Entrez votre mot de passe :\n=> ");
-    scanf("%s", password);
-
-
-    hash_password(password, hashedPassword);
-
-
-    char query[512];
-    snprintf(query, sizeof(query),
-             "SELECT COUNT(*) FROM USERS WHERE name='%s' AND password='%s'",
-             username, hashedPassword);
+     char *hashedPassword = hashPassword();
+     char safeUsername[MAX_USERNAME * 2];
+     mysql_real_escape_string(con, safeUsername, username, strlen(username));
+     char query[512];
+     snprintf(query, sizeof(query),
+          "SELECT COUNT(*) FROM USERS WHERE name='%s' AND password='%s'",
+          safeUsername, hashedPassword);
 
     if (mysql_query(con, query)) {
          finish_with_error(con);
@@ -53,7 +49,7 @@ int connexionUser() {
 
     if (count > 0) {
          printf("Connexion réussie !\n");
-         currentUser = malloc(sizeof(struct User));
+         currentUser = malloc(sizeof(struct user));
          if (currentUser == NULL) {
              fprintf(stderr, "Erreur d'allocation mémoire pour currentUser\n");
              return 0;

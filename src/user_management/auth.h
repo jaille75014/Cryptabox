@@ -6,7 +6,7 @@
 #ifndef AUTH_H
 #define AUTH_H
 
-#include <mysql>
+#include <mysql/mysql.h>
 
 int connexionUser(void);
 

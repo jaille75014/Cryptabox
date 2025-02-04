@@ -1,14 +1,17 @@
 #include <stdio.h>
 #include <string.h>
 #include <openssl/sha.h>
-#include <mysql.h>
+#include <mysql/mysql.h>
 #include "auth.h"
 #include "users.h"
 
 #define MAX_USERNAME 50
-#define MAX_PASSWORD 30
+#define PASSWORD_MAX_LENGTH 256
 #define HASH_SIZE 65
 #define SERVER "192.168.1.36"
+#define USERNAME "AJR3MOUSQUETAIRES"
+#define PASSWORD "MonSuperMotDePasse"
+
 
 void finish_with_error(MYSQL *con)
 {
@@ -26,25 +29,35 @@ MYSQL *connexionDb() {
       exit(1);
   }
 
-  if (mysql_real_connect(con, SERVER, "ajr3mousquetaires", "AJR3MOUSQUETAIRES", "CRYPTABOX", 0, NULL, 0) == NULL) {
+  if (mysql_real_connect(con, SERVER, USERNAME, PASSWORD, "CRYPTABOX", 0, NULL, 0) == NULL) {
         finish_with_error(con);
         }
   return con;
 }
 
-char *hashPassword() {
-    const char* passwordToHash = NULL;
-    char* hash = NULL;
 
-    passwordToHash = calloc(SHA256_DIGEST_LENGTH, sizeof(const unsigned char));
-    hash = calloc(SHA256_DIGEST_LENGTH, sizeof(char));
+
+char *hashPassword() {
+    char password[PASSWORD_MAX_LENGTH];
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    char *passwordHash = calloc(SHA256_DIGEST_LENGTH * 2 + 1, sizeof(char));
+
+    if (!passwordHash) {
+        fprintf(stderr, "Erreur d'allocation mémoire\n");
+        free(passwordHash);
+        return NULL;
+    }
 
     printf("Entrez votre mot de passe :\n");
-    fgets((char*) passwordToHash, SHA256_DIGEST_LENGTH, stdin);
-    size_t len = strlen((const char*) passwordToHash);
-    SHA256(passwordToHash, len, (unsigned char*) hash);
+    scanf("%s", password);
+    
+    SHA256((unsigned char *)password, strlen(password), hash);
 
-    return 0;
+    for (int i = 0; i < SHA256_DIGEST_LENGTH; i++) {
+        sprintf(passwordHash + (i * 2), "%02x", hash[i]);
+    }
+
+    return passwordHash; 
 }
 
 int userExist(MYSQL *con, const char *username) {
@@ -92,9 +105,9 @@ void createAccount(){
             free(password);
             finish_with_error(con);
         }
-
-        printf("Votre compte a ete créé avec succès, vous pouvez vous connecter\n");
-        free(password);
-        mysql_close(con);
-        return EXIT_SUCCESS;
+        else{
+            printf("Votre compte a ete créé avec succès, vous pouvez vous connecter\n");
+            free(password);
+            mysql_close(con);
+        }
 }
