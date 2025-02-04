@@ -11,12 +11,12 @@ void init_cli() {
     printf("               /____/  /_/                                       \n");
     printf("\n");
     printf("\n===============================================\n");
-    printf("Bonjour ! Bienvenue dans votre shell interactif Cryptabox ! Je vais vous guider...\n");
-    printf("Commencez par indiquer ce que vous souhaitez faire : \n");
-    printf("\ninscription : créer votre compte\n");
-    printf("\tconnexion: vous connecter\n");
-    printf("\tmenu : reafficher le menu\n");
-    printf("\tquit : Quitter le shell\n");
+    printf("Hello and welcome in your interactive shell Cryptabox ! Follow US...\n");
+    printf("Let's strat by specifying what you want to do: \n");
+    printf("\n\tregister : Create your account\n");
+    printf("\tlogin: connect with your credentials\n");
+    printf("\tmenu : print the menu\n");
+    printf("\tquit : logout and quit the Shell\n");
     printf("===============================================\n");
 }
 
