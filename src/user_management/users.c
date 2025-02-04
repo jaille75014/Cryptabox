@@ -72,7 +72,6 @@ char *hashPassword() {
 
 int userExist(MYSQL *con, const char *username) {
     char query[256];
-    int exist = 0;
     snprintf(query, sizeof(query), "SELECT COUNT(*) FROM USERS WHERE username='%s'", username);
     if (mysql_query(con, query)) {
         finish_with_error(con);
@@ -83,7 +82,7 @@ int userExist(MYSQL *con, const char *username) {
         finish_with_error(con);
     }
     MYSQL_ROW row = mysql_fetch_row(result);
-    int count = atoi(row[0]);
+    int exist = atoi(row[0]);
     mysql_free_result(result);
 
     return exist;
@@ -93,34 +92,34 @@ void createAccount(){
     MYSQL *con = connexionDb();
     int isExist;
     char username[MAX_USERNAME];
-	char *password;
-    
+    char *password;
+
     printf("Entrez votre identifiant (max %d caractères) :\n=> ", MAX_USERNAME - 1);
     if (scanf("%49s", username) != 1) {
         fprintf(stderr, "Identifiant incorrect ou trop long !\n");
-        return 0;
+        return;
     }
     fflush(stdin);
 
-	isExist = userExist(con, username);
+    isExist = userExist(con, username);
 
     if (isExist > 0) {
         printf("Bah alors on pert la boule ? En même temps c'est vrai que ce projet donne mal à la tête...\n");
         mysql_close(con);
         exit(EXIT_FAILURE);
     }
-	    password = hashPassword();
 
-        char query[512];
-        snprintf(query, sizeof(query), "INSERT INTO USERS (username, password) VALUES ('%s', '%s')", username, password);
+    password = hashPassword();
 
-        if (mysql_query(con, query)) {
-            free(password);
-            finish_with_error(con);
-        }
-        else{
-            printf("Votre compte a ete créé avec succès, vous pouvez vous connecter\n");
-            free(password);
-            mysql_close(con);
-        }
+    char query[512];
+    snprintf(query, sizeof(query), "INSERT INTO USERS (username, password) VALUES ('%s', '%s')", username, password);
+
+    if (mysql_query(con, query)) {
+        free(password);
+        finish_with_error(con);
+    } else {
+        printf("Votre compte a ete créé avec succès, vous pouvez vous connecter\n");
+        free(password);
+        mysql_close(con);
+    }
 }
