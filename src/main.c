@@ -74,23 +74,25 @@ int main() {
         logCommandToDatabase(command);
 
         if (strcmp(command, "crypt") == 0) {
+            unsigned char key[33];
+            unsigned char iv[AES_BLOCK_SIZE];
+            memset(key, 0, sizeof(key));
+            memset(iv, 0, sizeof(iv));
+
             printf("\nEntrez le fichier à crypter : ");
             if (scanf("%s", file) != 1) {
                 fprintf(stderr, "Erreur de saisie\n");
                 continue;
             }
-
             if (!generateKeyAndIV(key, iv)) {
                 printf("\nErreur de génération : clé et/ou vecteur d'initialisation incorrects\n");
                 continue;
             }
-
             if (encryptFile(file, "chiffre.txt", key, iv)) {
                 printf("\nFichier chiffré avec succès !\n");
             } else {
                 printf("\nÉchec du chiffrement\n");
             }
-
         } else if (strcmp(command, "decrypt") == 0) {
             printf("\nEntrez le fichier à déchiffrer : ");
             if (scanf("%s", file) != 1) {
