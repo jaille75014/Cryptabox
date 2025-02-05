@@ -107,8 +107,8 @@ void sendFile(int socketClient, FILE *file, const char *fileName) {
                 exit(EXIT_FAILURE);
             }
             total += sent;  
-    }
+        }
 
     printf("Fichier envoyé avec succès.\n");
-}
+    }
 }
