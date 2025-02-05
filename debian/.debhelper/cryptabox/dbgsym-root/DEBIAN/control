@@ -1,0 +1,12 @@
+Package: cryptabox-dbgsym
+Source: cryptabox
+Version: 1.0-1
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: AJR <les3mousquetaireesgi@gmail.com>
+Installed-Size: 27
+Depends: cryptabox (= 1.0-1)
+Section: debug
+Priority: optional
+Description: debug symbols for cryptabox
+Build-Ids: 5454bccae310f18121a92e8992ba282cee63728e

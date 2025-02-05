@@ -1,0 +1,17 @@
+Source: cryptabox
+Section: utils
+Priority: optional
+Maintainer: AJR <les3mousquetaireesgi@gmail.com>
+Build-Depends: debhelper-compat (= 13), libssl-dev, libmysqlclient-dev
+Standards-Version: 4.6.0
+Homepage: https://github.com/jaille75014/Cryptabox
+
+Package: cryptabox
+Architecture: amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}, libssl1.1, libmysqlclient21
+Description: CryptaBox - Sécurisation et Transfert de Fichiers
+  CryptaBox est une application permettant de sécuriser, stocker et transférer des fichiers 
+  Ce projet permet de sécuriser des fichiers avec un mot de passe, d'envoyer des fichiers de manière sécurisée via un réseau, de gérer des utilisateurs et de conserver un historique des actions effectuées.
+  Prérequis 
+    - OpenSSL pour le chiffrement.
+    - MySQL client pour la gestion des données.
