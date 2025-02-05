@@ -62,7 +62,7 @@ sudo make install
 
 Voici la structure du projet pour vous repérer facilement :
 
-cryptabox/
+cryptabox/\\n
 ├── debian/                   # Fichiers pour le packaging Debian
 ├── src/                      # Code source principal
 │   ├── main.c                # Point d'entrée principal du programme
