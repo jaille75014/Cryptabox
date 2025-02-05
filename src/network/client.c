@@ -108,7 +108,8 @@ void sendFile(int socketClient, FILE *file, const char *fileName) {
             }
             total += sent;  
         }
+    }
 
     printf("Fichier envoyé avec succès.\n");
-    }
+    
 }
