@@ -93,9 +93,9 @@ cryptabox/
 ├── README.md                 # Documentation
 ```
 ## Auteurs :  
+```Plaintext
   - Jules
   - Alban
-  - Rafael
-Email : 
-<les3mousquetaireesgi@gmail.com>
 
+<les3mousquetaireesgi@gmail.com>
+```
