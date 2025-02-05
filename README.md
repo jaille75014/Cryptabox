@@ -27,7 +27,7 @@ sur Debian/Ubuntu :
 ```bash
 sudo apt install libmysqlclient-dev
 ```
-## 1; Installation du projet : 
+## 1. Installation automatique du projet : 
 Téléchargez le fichier `cryptabox_1.0-1_amd64.deb` depuis la section "Releases" et installez-le avec :
 ```bash
 sudo dpkg -i cryptabox_1.0-1_amd64.deb
@@ -35,7 +35,7 @@ sudo apt-get -f install
 ```
 ## 2. Compilation manuelle
 
-Pour compiler le projet depuis le code source, suivez les étapes ci-dessous :
+Pour compiler vous-même le projet depuis le code source, suivez les étapes ci-dessous :
 Clonez le dépot : 
 ```
 git clone https://github.com/jaile75014/cryptabox.git
