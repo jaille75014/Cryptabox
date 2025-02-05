@@ -44,7 +44,7 @@ cd cryptabox
 
 Compilez le projet :
 ```
-make Cryptabox
+make bin/cryptabox
 ```
 Lancez l'exécutable :
 ```
