@@ -111,3 +111,4 @@ void sendFile(int socketClient, FILE *file, const char *fileName) {
 
     printf("Fichier envoyé avec succès.\n");
 }
+}
