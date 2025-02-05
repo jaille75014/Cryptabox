@@ -8,5 +8,5 @@
 
 
 void logCommandToDatabase(const char *command);
-
+void displayHistory();
 #endif

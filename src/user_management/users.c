@@ -10,9 +10,9 @@
 #define MAX_USERNAME 50
 #define PASSWORD_MAX_LENGTH 256
 #define HASH_SIZE 65
-#define SERVER "192.168.1.36"
-#define USERNAME "ajr3mousquetaires"
-#define PASSWORD "AJR3MOUSQUETAIRES"
+#define SERVER "localhost"
+#define USERNAME "AJR3MOUSQUETAIRES"
+#define PASSWORD "MonSuperMotDePasse"
 
 user *currentUser = NULL;
 
@@ -47,7 +47,6 @@ char *hashPassword() {
 
     if (!passwordHash) {
         fprintf(stderr, "Erreur d'allocation mémoire\n");
-        free(passwordHash);
         return NULL;
     }
 
@@ -55,18 +54,16 @@ char *hashPassword() {
     if (scanf("%255s", password) != 1) {
         fprintf(stderr, "Erreur de lecture du mot de passe.\n");
         free(passwordHash);
-        while (getchar() != '\n')
-        continue;
+        while (getchar() != '\n');
         return NULL;
     }
-    while (getchar() != '\n')
-    continue;
+    while (getchar() != '\n');
+
     SHA256((unsigned char *)password, strlen(password), hash);
 
     for (int i = 0; i < SHA256_DIGEST_LENGTH; i++) {
         sprintf(passwordHash + (i * 2), "%02x", hash[i]);
     }
-
     return passwordHash; 
 }
 

@@ -9,20 +9,6 @@
 #include "user_management/users.h"
 #include "user_management/history.h"
 
-void printMenu() {
-    printf("_______                      _____       ______                \n");
-    printf("__  ____/___________  ___________  /______ ___  /___________  __\n");
-    printf("_  /    __  ___/_  / / /__  __ \\  __/  __ `/_  __ \\  __ \\_  |/_/\n");
-    printf("/ /___  _  /   _  /_/ /__  /_/ / /_ / /_/ /_  /_/ / /_/ /_>  <  \n");
-    printf("\\____/  /_/    _\\__, / _  .___/\\__/ \\__,_/ /_.___/\\____//_/|_|  \n");
-    printf("               /____/  /_/                                       \n");
-
-    printf("\n1. crypt : Chiffrer un fichier avec l'aide d'un mot de passe.\n");
-    printf("2. decrypt : Déchiffrer un fichier avec l'aide d'un mot de passe.\n");
-    printf("3. send [file] [IP] : Envoyer un fichier sur une machine distante.\n");
-    printf("4. receive : Accepter de recevoir un fichier.\n");
-    printf("5. quit : Quitter.\n");
-}
 
 int main() {
     int i;
@@ -65,21 +51,22 @@ int main() {
 
     unsigned char key[32];
     unsigned char iv[AES_BLOCK_SIZE];
-
+        
+    printMenu();
     do {
         char line[200] = { " " };
         char command[50] = { " " };
         char file[100] = { " " };
         char IP[15] = { "" };
 
-        printMenu();
-        printf("\nVotre action : ");
+        printf("\nVotre action : \n=> ");
 
         if (scanf("%[^\n]", line) != 1) {
             fprintf(stderr, "Erreur de saisie\n");
             while (getchar() != '\n');
             continue;
         }
+        while(getchar() != '\n');
 
         for (i = 0; (line[i] != ' ' && line[i] != '\0'); ++i) {
             command[i] = line[i];
@@ -153,6 +140,12 @@ int main() {
 
         } else if (strcmp(command, "receive") == 0) {
             receive();
+
+        } else if (strcmp(command, "history") == 0) {
+            displayHistory();
+
+        } else if (strcmp(command, "menu") == 0) {
+            printMenu();
 
         } else if (strcmp(command, "quit") == 0) {
             deconnexionUser();
