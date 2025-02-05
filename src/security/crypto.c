@@ -14,6 +14,7 @@ int generateKeyAndIV(unsigned char *key, unsigned char *iv) {
         fprintf(stderr, "Erreur de lecture de la clé\n");
         return 0;
     }
+    while (getchar() != '\n');
 
     if (strlen((const char *)key) != 32) {
         fprintf(stderr, "La clé doit faire 32 caractères !\n");
@@ -24,9 +25,11 @@ int generateKeyAndIV(unsigned char *key, unsigned char *iv) {
         fprintf(stderr, "Erreur de génération du Vecteur d'Initialisation\n");
         return 0;
     }
+    
 
     return 1;
 }
+
 
 int encryptFile(const char *input_file, const char *output_file, unsigned char *key, unsigned char *iv) {
     FILE *input = fopen(input_file, "rb");
@@ -39,6 +42,13 @@ int encryptFile(const char *input_file, const char *output_file, unsigned char *
     if (!output) {
         fprintf(stderr, "Erreur d'ouverture de %s: %s\n", output_file, strerror(errno));
         fclose(input);
+        return 0;
+    }
+
+    if (fwrite(iv, 1, AES_BLOCK_SIZE, output) != AES_BLOCK_SIZE) {
+        fprintf(stderr, "Erreur d'écriture de l'IV dans le fichier de sortie\n");
+        fclose(input);
+        fclose(output);
         return 0;
     }
 
@@ -60,10 +70,11 @@ int encryptFile(const char *input_file, const char *output_file, unsigned char *
 
     unsigned char buffer[1024];  // Tampon pour lire les données
     unsigned char textChiffre[1024 + AES_BLOCK_SIZE];  // Tampon pour stocker les données chiffrées
-    size_t nbrOctets, textChiffre_len;
+    int textChiffre_len;
 
+    size_t nbrOctets;
     while ((nbrOctets = fread(buffer, 1, sizeof(buffer), input)) > 0) {
-        if (EVP_EncryptUpdate(ctx, textChiffre, (int *)&textChiffre_len, buffer, (int)nbrOctets) != 1) {
+        if (EVP_EncryptUpdate(ctx, textChiffre, &textChiffre_len, buffer, (int)nbrOctets) != 1) {
             fprintf(stderr, "Erreur de chiffrement\n");
             EVP_CIPHER_CTX_free(ctx);
             fclose(input);
@@ -72,8 +83,8 @@ int encryptFile(const char *input_file, const char *output_file, unsigned char *
         }
 
         size_t written = fwrite(textChiffre, 1, textChiffre_len, output);
-        if (written != textChiffre_len) {
-            fprintf(stderr, "Erreur d'écriture dans le fichier de sortie. Nombre d'octets écrits : %ld / %ld\n", written, textChiffre_len);
+        if (written != (size_t)textChiffre_len) {
+            fprintf(stderr, "Erreur d'écriture dans le fichier de sortie. Nombre d'octets écrits : %ld / %d\n", written, textChiffre_len);
             EVP_CIPHER_CTX_free(ctx);
             fclose(input);
             fclose(output);
@@ -82,7 +93,7 @@ int encryptFile(const char *input_file, const char *output_file, unsigned char *
     }
 
     unsigned char finalText[AES_BLOCK_SIZE];
-    if (EVP_EncryptFinal_ex(ctx, finalText, (int *)&textChiffre_len) != 1) {
+    if (EVP_EncryptFinal_ex(ctx, finalText, &textChiffre_len) != 1) {
         fprintf(stderr, "Erreur de finalisation du chiffrement\n");
         EVP_CIPHER_CTX_free(ctx);
         fclose(input);
@@ -91,8 +102,8 @@ int encryptFile(const char *input_file, const char *output_file, unsigned char *
     }
 
     size_t written = fwrite(finalText, 1, textChiffre_len, output);
-    if (written != textChiffre_len) {
-        fprintf(stderr, "Erreur d'écriture finale dans le fichier de sortie. Nombre d'octets écrits: %ld / %ld\n", written, textChiffre_len);
+    if (written != (size_t)textChiffre_len) {
+        fprintf(stderr, "Erreur d'écriture finale dans le fichier de sortie. Nombre d'octets écrits : %ld / %d\n", written, textChiffre_len);
         EVP_CIPHER_CTX_free(ctx);
         fclose(input);
         fclose(output);
@@ -105,10 +116,17 @@ int encryptFile(const char *input_file, const char *output_file, unsigned char *
     return 1;
 }
 
+
 int decryptFile(const char *input_file, const char *output_file, unsigned char *key, unsigned char *iv) {
     FILE *input = fopen(input_file, "rb");
     if (!input) {
         fprintf(stderr, "Erreur d'ouverture de %s: %s\n", input_file, strerror(errno));
+        return 0;
+    }
+
+    if (fread(iv, 1, AES_BLOCK_SIZE, input) != AES_BLOCK_SIZE) {
+        fprintf(stderr, "Erreur de lecture de l'IV dans le fichier chiffré\n");
+        fclose(input);
         return 0;
     }
 
@@ -136,19 +154,18 @@ int decryptFile(const char *input_file, const char *output_file, unsigned char *
     }
 
     unsigned char buffer[1024]; // Tampon pour lire les données chiffrées
-    unsigned char textDechiffre[1024 + EVP_MAX_BLOCK_LENGTH]; // Tampon ajusté pour déchiffrement
-    size_t nbrOctets, textDechiffre_len;
+    unsigned char textDechiffre[1024 + EVP_MAX_BLOCK_LENGTH]; // Tampon pour stocker les données déchiffrées
+    int nbrOctets, textDechiffre_len;
 
-    while ((nbrOctets = fread(buffer, 1, sizeof(buffer), input)) > 0) {
-        if (EVP_DecryptUpdate(ctx, textDechiffre, (int *)&textDechiffre_len, buffer, (int)nbrOctets) != 1) {
+    while ((nbrOctets = (int)fread(buffer, 1, sizeof(buffer), input)) > 0) {
+        if (EVP_DecryptUpdate(ctx, textDechiffre, &textDechiffre_len, buffer, nbrOctets) != 1) {
             fprintf(stderr, "Erreur de déchiffrement\n");
             EVP_CIPHER_CTX_free(ctx);
             fclose(input);
             fclose(output);
             return 0;
         }
-
-        if (fwrite(textDechiffre, 1, textDechiffre_len, output) != textDechiffre_len) {
+        if (fwrite(textDechiffre, 1, textDechiffre_len, output) != (size_t)textDechiffre_len) {
             fprintf(stderr, "Erreur d'écriture dans le fichier de sortie : %s\n", strerror(errno));
             EVP_CIPHER_CTX_free(ctx);
             fclose(input);
@@ -157,15 +174,14 @@ int decryptFile(const char *input_file, const char *output_file, unsigned char *
         }
     }
 
-    if (EVP_DecryptFinal_ex(ctx, textDechiffre, (int *)&textDechiffre_len) != 1) {
+    if (EVP_DecryptFinal_ex(ctx, textDechiffre, &textDechiffre_len) != 1) {
         fprintf(stderr, "Erreur de finalisation du déchiffrement\n");
         EVP_CIPHER_CTX_free(ctx);
         fclose(input);
         fclose(output);
         return 0;
     }
-
-    if (fwrite(textDechiffre, 1, textDechiffre_len, output) != textDechiffre_len) {
+    if (fwrite(textDechiffre, 1, textDechiffre_len, output) != (size_t)textDechiffre_len) {
         fprintf(stderr, "Erreur d'écriture finale dans le fichier de sortie : %s\n", strerror(errno));
         EVP_CIPHER_CTX_free(ctx);
         fclose(input);

@@ -31,7 +31,7 @@ int main() {
         for (i = 0; (line[i] != ' ' && line[i] != '\0'); ++i) {
             command[i] = line[i];
         }
-        logCommandToDatabase(command);
+        logCommandToDatabase(line);
 
         if (strcmp(command, "login") == 0) {
             printf("Vous avez choisi de vous connecter\n");
@@ -71,7 +71,7 @@ int main() {
         for (i = 0; (line[i] != ' ' && line[i] != '\0'); ++i) {
             command[i] = line[i];
         }
-        logCommandToDatabase(command);
+        logCommandToDatabase(line);
 
         if (strcmp(command, "crypt") == 0) {
             unsigned char key[33];
@@ -82,8 +82,11 @@ int main() {
             printf("\nEntrez le fichier à crypter : ");
             if (scanf("%s", file) != 1) {
                 fprintf(stderr, "Erreur de saisie\n");
+                while (getchar() != '\n');
                 continue;
             }
+            while (getchar() != '\n');
+
             if (!generateKeyAndIV(key, iv)) {
                 printf("\nErreur de génération : clé et/ou vecteur d'initialisation incorrects\n");
                 continue;
@@ -91,14 +94,16 @@ int main() {
             if (encryptFile(file, "chiffre.txt", key, iv)) {
                 printf("\nFichier chiffré avec succès !\n");
             } else {
-                printf("\nÉchec du chiffrement\n");
+                printf("\nEchec du chiffrement\n");
             }
         } else if (strcmp(command, "decrypt") == 0) {
             printf("\nEntrez le fichier à déchiffrer : ");
             if (scanf("%s", file) != 1) {
+                while (getchar() != '\n');
                 fprintf(stderr, "Erreur de saisie\n");
                 continue;
             }
+            while (getchar() != '\n');
 
             if (!generateKeyAndIV(key, iv)) {
                 printf("\nErreur de génération : clé et/ou vecteur d'initialisation incorrects\n");
@@ -108,14 +113,14 @@ int main() {
             if (decryptFile(file, "dechiffre.txt", key, iv)) {
                 printf("\nFichier déchiffré avec succès !\n");
             } else {
-                printf("\nÉchec du déchiffrement\n");
+                printf("\nEchec du déchiffrement\n");
             }
 
         } else if (strcmp(command, "send") == 0) {
             
             while (line[i] == ' ') i++;
             if (line[i] == '\0') {
-                fprintf(stderr, "\nVeuillez entrer un nom de fichier.");
+                fprintf(stderr, "\nVeuillez entrer un nom de fichier");
                 continue;
             }
 
@@ -127,7 +132,7 @@ int main() {
 
             while (line[i] == ' ') i++;
             if (line[i] == '\0') {
-                fprintf(stderr, "\nVeuillez entrer une IP valide.");
+                fprintf(stderr, "\nVeuillez entrer une IP valide");
                 continue;
             }
 
