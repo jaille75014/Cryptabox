@@ -94,28 +94,18 @@ void sendFile(int socketClient, FILE *file, const char *fileName) {
 
     char buffer[1024];
     size_t bytesRead;
-    /*while ((bytesRead = fread(buffer, 1, sizeof(buffer), file)) > 0) {
-        if (send(socketClient, buffer, bytesRead, 0) == -1) {
-            fprintf(stderr,"Erreur lors de l'envoi du fichier\n");
-            fclose(file);
-            file=NULL;
-            close(socketClient);
-            exit(EXIT_FAILURE);
-        }
-    }*/
+    
 
     while ((bytesRead = fread(buffer, 1, sizeof(buffer), file)) > 0) {
         size_t total = 0;
         while (total < bytesRead) {
-            
-           
-                fprintf(stderr,"Erreur lors de l'envoie du fichier..\n");
+            if (send(socketClient, buffer + total, bytesRead - total, 0);) { 
+                fprintf(stderr, "Erreur lors de l'envoie du fichier..\n");
                 fclose(file);
                 close(socketClient);
                 exit(EXIT_FAILURE);
             }
-            total += sent;
-        }
+            total += sent;  
     }
 
     printf("Fichier envoyé avec succès.\n");
