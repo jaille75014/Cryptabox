@@ -99,7 +99,8 @@ void sendFile(int socketClient, FILE *file, const char *fileName) {
     while ((bytesRead = fread(buffer, 1, sizeof(buffer), file)) > 0) {
         size_t total = 0;
         while (total < bytesRead) {
-            if (send(socketClient, buffer + total, bytesRead - total, 0);) { 
+            ssize_t sent = send(socketClient, buffer + total, bytesRead - total, 0);
+            if (sent==-1) { 
                 fprintf(stderr, "Erreur lors de l'envoie du fichier..\n");
                 fclose(file);
                 close(socketClient);
