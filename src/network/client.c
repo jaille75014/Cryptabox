@@ -1,14 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/socket.h> // Pour implémenter des sockets
-#include <netinet/in.h> // Pour gérer la structure socket avec la famille de protocole, l'IP et le port d'écoute
-#include <unistd.h>
-#include <arpa/inet.h> // Pour la fonction inet_aton() permettant de transformer une adresse IP en binaire
+#include <sys/socket.h> 
+#include <netinet/in.h> 
+#include <arpa/inet.h>
 #include "client.h"
 
 
-typedef struct sockaddr_in SOCKADDR_IN; // sockaddr_in est une structure définie dans <netinet/in.h> permettant de caractérisé notre socket ensuite avec bind()
+typedef struct sockaddr_in SOCKADDR_IN; 
 
 
 
@@ -25,7 +24,7 @@ int client(char fileName[100], char IP[15]){
 
 
 
-    if((socketClient= socket(AF_INET,SOCK_STREAM,0))==-1){// https://man7.org/linux/man-pages/man2/socket.2.html
+    if((socketClient= socket(AF_INET,SOCK_STREAM,0))==-1){
         fprintf(stderr,"Erreur à l'initialisation du socket.\n");
         fclose(file);
         file=NULL;
@@ -33,8 +32,8 @@ int client(char fileName[100], char IP[15]){
     }
 
     SOCKADDR_IN socketAddress;
-    socketAddress.sin_family=AF_INET; // TCP    
-    socketAddress.sin_port=14972 ; // On écoute sur le port 14972
+    socketAddress.sin_family=AF_INET; 
+    socketAddress.sin_port=14972 ; 
 
     if(inet_aton(IP,&socketAddress.sin_addr)!=1){ 
         fprintf(stderr,"Adresse IP invalide.\n");
