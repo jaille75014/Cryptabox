@@ -91,7 +91,7 @@ cryptabox/
 ├── obj/                      # Fichiers objets intermédiaires
 ├── Makefile                  # Script de compilation et installation
 ├── README.md                 # Documentation
-``
+```
 ## Auteurs :  
   - Jules
   - Alban
