@@ -61,8 +61,8 @@ sudo make install
  **Arborescence du projet**
 
 Voici la structure du projet pour vous repérer facilement :
-
-cryptabox/\\n
+```Plaintext
+cryptabox/
 ├── debian/                   # Fichiers pour le packaging Debian
 ├── src/                      # Code source principal
 │   ├── main.c                # Point d'entrée principal du programme
@@ -91,7 +91,7 @@ cryptabox/\\n
 ├── obj/                      # Fichiers objets intermédiaires
 ├── Makefile                  # Script de compilation et installation
 ├── README.md                 # Documentation
-
+``
 ## Auteurs :  
   - Jules
   - Alban
