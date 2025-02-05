@@ -105,16 +105,16 @@ void sendFile(int socketClient, FILE *file, const char *fileName) {
     }*/
 
     while ((bytesRead = fread(buffer, 1, sizeof(buffer), file)) > 0) {
-        size_t totalSent = 0;
-        while (totalSent < bytesRead) {
+        size_t total = 0;
+        while (total < bytesRead) {
             ssize_t sent = send(socketClient, buffer + totalSent, bytesRead - totalSent, 0);
             if (sent == -1) {
-                perror("Erreur lors de l'envoi des données");
+                fprintf(stderr,"Erreur lors de l'envoie du fichier..\n");
                 fclose(file);
                 close(socketClient);
                 exit(EXIT_FAILURE);
             }
-            totalSent += sent;
+            total += sent;
         }
     }
 
