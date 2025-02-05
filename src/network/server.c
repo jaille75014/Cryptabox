@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/socket.h> // Pour implémenter des sockets
-#include <netinet/in.h> // Pour gérer la structure socket avec la famille de protocole, l'IP et le port d'écoute
+#include <sys/socket.h> 
+#include <netinet/in.h> 
 #include <unistd.h>
 #include "server.h"
 
-typedef struct sockaddr_in SOCKADDR_IN; // sockaddr_in est une structure définie dans <netinet/in.h> permettant de caractérisé notre socket ensuite avec bind()
+typedef struct sockaddr_in SOCKADDR_IN; 
 
 int receive(){
     ssize_t receivedBytes;
@@ -25,9 +25,9 @@ int receive(){
 
     SOCKADDR_IN socketAddress;
 
-    socketAddress.sin_family=AF_INET; // TCP    
-    socketAddress.sin_port=14972 ; // On écoute sur le port 14972
-    socketAddress.sin_addr.s_addr=INADDR_ANY; // On accepte les connexions depuis n'importe quelle IP de notre serveur
+    socketAddress.sin_family=AF_INET; 
+    socketAddress.sin_port=14972 ; 
+    socketAddress.sin_addr.s_addr=INADDR_ANY; 
 
     if(bind(socketServer, (struct sockaddr *) &socketAddress,sizeof(socketAddress))==-1){
         fprintf(stderr,"Erreur lors de la liaison entre le socket et ses paramètres.\n");
@@ -37,7 +37,7 @@ int receive(){
 
     
 
-    if(listen(socketServer,maxClient)==-1){ // Listen permet de mettre en écoute le serveur
+    if(listen(socketServer,maxClient)==-1){ 
         fprintf(stderr, "Impossible d'écouter les connexions entrantes\n");
         close(socketServer);
         exit(EXIT_FAILURE);
