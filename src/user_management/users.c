@@ -4,7 +4,7 @@
 #include <mysql/mysql.h>
 #include "auth.h"
 #include "users.h"
-#include "../../global.h"
+#include "../../include/global.h"
 
 
 #define MAX_USERNAME 50

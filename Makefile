@@ -7,7 +7,7 @@ SRC = src/
 INCL = include/
 
 FILEC := $(wildcard $(SRC)cli/*.c $(SRC)network/*.c $(SRC)security/*.c $(SRC)user_management/*.c $(SRC)main.c)
-FILEH := $(wildcard $(SRC)cli/*.h $(SRC)network/*.h $(SRC)security/*.h $(SRC)user_management/*.h $(SRC)global.h)
+FILEH := $(wildcard $(SRC)cli/*.h $(SRC)network/*.h $(SRC)security/*.h $(SRC)user_management/*.h $(SRC)/include/global.h)
 FILEO := $(patsubst $(SRC)%.c,$(OBJ)%.o,$(FILEC))
 
 

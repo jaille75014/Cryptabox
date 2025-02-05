@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "../../global.h"
+#include "../../include/global.h"
 #include <openssl/sha.h>
 #include <mysql/mysql.h>
 #include "auth.h"

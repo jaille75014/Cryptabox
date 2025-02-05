@@ -10,7 +10,7 @@
 #include <mysql/mysql.h>
 #include "auth.h"
 #include "history.h"
-#include "../../global.h"
+#include "../../include/global.h"
 
 #define QUERY_SIZE 2048
 
