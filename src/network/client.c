@@ -5,6 +5,7 @@
 #include <netinet/in.h> 
 #include <arpa/inet.h>
 #include "client.h"
+#include <unistd.h>
 
 
 typedef struct sockaddr_in SOCKADDR_IN; 
