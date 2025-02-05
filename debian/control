@@ -8,7 +8,7 @@ Homepage: https://github.com/jaille75014/Cryptabox
 
 Package: cryptabox
 Architecture: amd64
-Depends: ${shlibs:Depends}, ${misc:Depends}, libssl1.1, libmysqlclient21
+Depends: ${shlibs:Depends}, ${misc:Depends}, libssl3, libmysqlclient21
 Description: CryptaBox - Sécurisation et Transfert de Fichiers
   CryptaBox est une application permettant de sécuriser, stocker et transférer des fichiers 
   Ce projet permet de sécuriser des fichiers avec un mot de passe, d'envoyer des fichiers de manière sécurisée via un réseau, de gérer des utilisateurs et de conserver un historique des actions effectuées.
