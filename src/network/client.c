@@ -81,9 +81,10 @@ FILE *openFile(char fileName[100]) {
 
 
 void sendFile(int socketClient, FILE *file, const char *fileName) {
-
-    if (send(socketClient, fileName, 100, 0) == -1) {
-        fprintf(stderr,"Erreur lors de l'envoi du nom du fichier\n");
+    char*newFileName=strrchr(fileName,'/');
+    
+    if (send(socketClient, newFileName!=NULL?newFileName+1:fileName, 100, 0) == -1) {
+        fprintf(stderr,"Erreur lors de l'envoie du nom du fichier\n");
         fclose(file);
         file=NULL;
         close(socketClient);
